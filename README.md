@@ -9,7 +9,7 @@ Project Root
 │   ├── extractions.R
 │      └── R script that extracts all graphs into one dataset.
 │
-└── pilot_rr_reading_scd.Rproj
+└── reading_scd_ma_rr.Rproj
     └── Project file for RStudio.
 ```
 
