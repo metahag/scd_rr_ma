@@ -24,6 +24,8 @@ reliability_df <- filtered_df %>% select(id, x_round, y_round, filename, case, s
                         id == "intervention sessions" ~ "intervention",
                         TRUE ~ id))
 
+write_csv(reliability_df, "analysis/reliability_df.csv")
+
 
 # plot graphs for each extraction
 study_1 <- reliability_df %>%
