@@ -1,0 +1,772 @@
+id,x_round,y_round,filename,case,study
+baseline,1,-0,Emil.csv,Kiernan_Outcome3,Browder_2012
+baseline,2,1,Emil.csv,Kiernan_Outcome3,Browder_2012
+baseline,3,-0,Emil.csv,Kiernan_Outcome3,Browder_2012
+baseline,16,1,Emil.csv,Kiernan_Outcome3,Browder_2012
+baseline,31,1,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,35,4,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,36,4,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,38,5,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,39,2,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,40,3,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,41,3,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,42,6,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,43,2,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,44,5,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,45,6,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,46,7,Emil.csv,Kiernan_Outcome3,Browder_2012
+intervention,55,5,Emil.csv,Kiernan_Outcome3,Browder_2012
+baseline,1,0,Emil.csv,Kiernan_Outcome4,Browder_2012
+baseline,2,0,Emil.csv,Kiernan_Outcome4,Browder_2012
+baseline,3,0,Emil.csv,Kiernan_Outcome4,Browder_2012
+baseline,16,1,Emil.csv,Kiernan_Outcome4,Browder_2012
+baseline,31,1,Emil.csv,Kiernan_Outcome4,Browder_2012
+baseline,45,1,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,47,4,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,48,1,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,49,3,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,50,2,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,51,3,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,52,0,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,53,2,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,54,3,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,55,3,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,56,2,Emil.csv,Kiernan_Outcome4,Browder_2012
+intervention,57,4,Emil.csv,Kiernan_Outcome4,Browder_2012
+baseline,1,4,Emil.csv,Todd_Outcome1,Browder_2012
+baseline,2,4,Emil.csv,Todd_Outcome1,Browder_2012
+baseline,3,4,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,4,3,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,11,7,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,12,7,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,13,8,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,14,9,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,16,9,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,20,9,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,25,9,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,31,9,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,42,9,Emil.csv,Todd_Outcome1,Browder_2012
+intervention,49,9,Emil.csv,Todd_Outcome1,Browder_2012
+baseline,1,5,Emil.csv,Todd_Outcome2,Browder_2012
+baseline,2,5,Emil.csv,Todd_Outcome2,Browder_2012
+baseline,3,4,Emil.csv,Todd_Outcome2,Browder_2012
+baseline,16,2,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,17,4,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,18,5,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,19,4,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,20,6,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,21,7,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,23,7,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,24,6,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,25,10,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,27,9,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,28,8,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,29,9,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,30,10,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,31,9,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,32,9,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,34,10,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,42,10,Emil.csv,Todd_Outcome2,Browder_2012
+intervention,49,10,Emil.csv,Todd_Outcome2,Browder_2012
+baseline,1,2,Emil.csv,Todd_Outcome3,Browder_2012
+baseline,2,0,Emil.csv,Todd_Outcome3,Browder_2012
+baseline,3,1,Emil.csv,Todd_Outcome3,Browder_2012
+baseline,16,1,Emil.csv,Todd_Outcome3,Browder_2012
+baseline,31,-0,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,35,5,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,36,7,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,37,7,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,38,8,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,40,7,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,42,8,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,43,9,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,45,9,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,47,9,Emil.csv,Todd_Outcome3,Browder_2012
+intervention,49,8,Emil.csv,Todd_Outcome3,Browder_2012
+baseline,1,2,Emil.csv,Todd_Outcome4,Browder_2012
+baseline,2,0,Emil.csv,Todd_Outcome4,Browder_2012
+baseline,3,0,Emil.csv,Todd_Outcome4,Browder_2012
+baseline,16,1,Emil.csv,Todd_Outcome4,Browder_2012
+baseline,31,1,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,42,1,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,43,7,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,44,8,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,45,10,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,46,10,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,47,10,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,48,10,Emil.csv,Todd_Outcome4,Browder_2012
+intervention,49,10,Emil.csv,Todd_Outcome4,Browder_2012
+baseline,0,32,Emil.csv,A,Calik_2010
+baseline,1,30,Emil.csv,A,Calik_2010
+baseline,3,32,Emil.csv,A,Calik_2010
+intervention,3,71,Emil.csv,A,Calik_2010
+intervention,4,82,Emil.csv,A,Calik_2010
+intervention,6,71,Emil.csv,A,Calik_2010
+intervention,6,82,Emil.csv,A,Calik_2010
+intervention,7,82,Emil.csv,A,Calik_2010
+intervention,9,90,Emil.csv,A,Calik_2010
+intervention,10,101,Emil.csv,A,Calik_2010
+intervention,11,101,Emil.csv,A,Calik_2010
+intervention,12,100,Emil.csv,A,Calik_2010
+baseline,1,39,Emil.csv,B,Calik_2010
+baseline,2,40,Emil.csv,B,Calik_2010
+baseline,3,40,Emil.csv,B,Calik_2010
+intervention,16,81,Emil.csv,B,Calik_2010
+intervention,17,80,Emil.csv,B,Calik_2010
+intervention,18,89,Emil.csv,B,Calik_2010
+intervention,19,81,Emil.csv,B,Calik_2010
+intervention,20,90,Emil.csv,B,Calik_2010
+intervention,21,89,Emil.csv,B,Calik_2010
+intervention,22,100,Emil.csv,B,Calik_2010
+intervention,22,100,Emil.csv,B,Calik_2010
+intervention,24,100,Emil.csv,B,Calik_2010
+baseline,1,28,Emil.csv,C,Calik_2010
+baseline,2,28,Emil.csv,C,Calik_2010
+baseline,3,29,Emil.csv,C,Calik_2010
+intervention,27,79,Emil.csv,C,Calik_2010
+intervention,29,89,Emil.csv,C,Calik_2010
+intervention,29,80,Emil.csv,C,Calik_2010
+intervention,31,81,Emil.csv,C,Calik_2010
+intervention,32,89,Emil.csv,C,Calik_2010
+intervention,32,99,Emil.csv,C,Calik_2010
+intervention,33,99,Emil.csv,C,Calik_2010
+intervention,34,100,Emil.csv,C,Calik_2010
+intervention,35,100,Emil.csv,C,Calik_2010
+baseline,4,0,Emil.csv,Dylan,Champan_2019
+baseline,5,0,Emil.csv,Dylan,Champan_2019
+baseline,6,0,Emil.csv,Dylan,Champan_2019
+intervention,7,0,Emil.csv,Dylan,Champan_2019
+intervention,8,0,Emil.csv,Dylan,Champan_2019
+intervention,9,2,Emil.csv,Dylan,Champan_2019
+intervention,10,6,Emil.csv,Dylan,Champan_2019
+intervention,11,2,Emil.csv,Dylan,Champan_2019
+intervention,12,5,Emil.csv,Dylan,Champan_2019
+intervention,13,6,Emil.csv,Dylan,Champan_2019
+intervention,14,7,Emil.csv,Dylan,Champan_2019
+intervention,15,7,Emil.csv,Dylan,Champan_2019
+intervention,16,7,Emil.csv,Dylan,Champan_2019
+intervention,17,7,Emil.csv,Dylan,Champan_2019
+intervention,18,8,Emil.csv,Dylan,Champan_2019
+intervention,19,9,Emil.csv,Dylan,Champan_2019
+intervention,20,8,Emil.csv,Dylan,Champan_2019
+intervention,21,8,Emil.csv,Dylan,Champan_2019
+intervention,22,9,Emil.csv,Dylan,Champan_2019
+intervention,23,9,Emil.csv,Dylan,Champan_2019
+intervention,24,9,Emil.csv,Dylan,Champan_2019
+baseline,1,0,Jonna.csv,Kiernan_Outcome3,Browder_2012
+baseline,2,1,Jonna.csv,Kiernan_Outcome3,Browder_2012
+baseline,3,0,Jonna.csv,Kiernan_Outcome3,Browder_2012
+baseline,16,1,Jonna.csv,Kiernan_Outcome3,Browder_2012
+baseline,31,1,Jonna.csv,Kiernan_Outcome3,Browder_2012
+baseline,1,0,Jonna.csv,Kiernan_Outcome4,Browder_2012
+baseline,2,0,Jonna.csv,Kiernan_Outcome4,Browder_2012
+baseline,3,-0,Jonna.csv,Kiernan_Outcome4,Browder_2012
+baseline,16,1,Jonna.csv,Kiernan_Outcome4,Browder_2012
+baseline,31,1,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,47,4,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,48,1,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,49,3,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,50,2,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,51,3,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,52,-0,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,53,2,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,54,3,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,55,3,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,56,2,Jonna.csv,Kiernan_Outcome4,Browder_2012
+intervention,57,4,Jonna.csv,Kiernan_Outcome4,Browder_2012
+baseline,1,4,Jonna.csv,Todd_Outcome1,Browder_2012
+baseline,2,4,Jonna.csv,Todd_Outcome1,Browder_2012
+baseline,3,4,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,4,3,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,11,7,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,12,7,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,13,8,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,14,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,14,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,14,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,14,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,16,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,20,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,25,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,31,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,42,9,Jonna.csv,Todd_Outcome1,Browder_2012
+intervention,49,9,Jonna.csv,Todd_Outcome1,Browder_2012
+baseline,1,5,Jonna.csv,Todd_Outcome2,Browder_2012
+baseline,2,5,Jonna.csv,Todd_Outcome2,Browder_2012
+baseline,3,4,Jonna.csv,Todd_Outcome2,Browder_2012
+baseline,16,2,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,17,4,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,18,5,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,19,4,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,20,6,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,21,7,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,23,7,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,24,6,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,25,10,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,27,9,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,28,8,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,29,9,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,30,10,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,31,9,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,32,9,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,34,10,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,42,10,Jonna.csv,Todd_Outcome2,Browder_2012
+intervention,49,10,Jonna.csv,Todd_Outcome2,Browder_2012
+baseline,1,2,Jonna.csv,Todd_Outcome3,Browder_2012
+baseline,2,0,Jonna.csv,Todd_Outcome3,Browder_2012
+baseline,3,1,Jonna.csv,Todd_Outcome3,Browder_2012
+baseline,16,1,Jonna.csv,Todd_Outcome3,Browder_2012
+baseline,31,-0,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,35,5,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,36,7,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,37,7,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,38,8,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,40,7,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,42,8,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,43,9,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,45,9,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,47,9,Jonna.csv,Todd_Outcome3,Browder_2012
+intervention,49,8,Jonna.csv,Todd_Outcome3,Browder_2012
+baseline,1,2,Jonna.csv,Todd_Outcome4,Browder_2012
+baseline,2,0,Jonna.csv,Todd_Outcome4,Browder_2012
+baseline,3,0,Jonna.csv,Todd_Outcome4,Browder_2012
+baseline,16,1,Jonna.csv,Todd_Outcome4,Browder_2012
+baseline,31,1,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,42,1,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,43,7,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,44,8,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,45,10,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,46,10,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,47,10,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,48,10,Jonna.csv,Todd_Outcome4,Browder_2012
+intervention,49,10,Jonna.csv,Todd_Outcome4,Browder_2012
+baseline,0,31,Jonna.csv,A,Calik_2010
+baseline,2,31,Jonna.csv,A,Calik_2010
+baseline,3,30,Jonna.csv,A,Calik_2010
+intervention,4,71,Jonna.csv,A,Calik_2010
+intervention,5,81,Jonna.csv,A,Calik_2010
+intervention,6,70,Jonna.csv,A,Calik_2010
+intervention,7,81,Jonna.csv,A,Calik_2010
+intervention,8,81,Jonna.csv,A,Calik_2010
+intervention,9,91,Jonna.csv,A,Calik_2010
+intervention,10,101,Jonna.csv,A,Calik_2010
+intervention,11,101,Jonna.csv,A,Calik_2010
+intervention,12,101,Jonna.csv,A,Calik_2010
+baseline,0,40,Jonna.csv,B,Calik_2010
+baseline,2,40,Jonna.csv,B,Calik_2010
+baseline,3,40,Jonna.csv,B,Calik_2010
+intervention,16,80,Jonna.csv,B,Calik_2010
+intervention,17,80,Jonna.csv,B,Calik_2010
+intervention,18,90,Jonna.csv,B,Calik_2010
+intervention,19,80,Jonna.csv,B,Calik_2010
+intervention,20,91,Jonna.csv,B,Calik_2010
+intervention,21,90,Jonna.csv,B,Calik_2010
+intervention,22,101,Jonna.csv,B,Calik_2010
+intervention,23,100,Jonna.csv,B,Calik_2010
+intervention,24,100,Jonna.csv,B,Calik_2010
+baseline,0,30,Jonna.csv,C,Calik_2010
+baseline,2,30,Jonna.csv,C,Calik_2010
+baseline,3,30,Jonna.csv,C,Calik_2010
+intervention,28,80,Jonna.csv,C,Calik_2010
+intervention,29,90,Jonna.csv,C,Calik_2010
+intervention,30,81,Jonna.csv,C,Calik_2010
+intervention,31,81,Jonna.csv,C,Calik_2010
+intervention,32,90,Jonna.csv,C,Calik_2010
+intervention,33,101,Jonna.csv,C,Calik_2010
+intervention,34,100,Jonna.csv,C,Calik_2010
+intervention,35,100,Jonna.csv,C,Calik_2010
+intervention,36,100,Jonna.csv,C,Calik_2010
+baseline,4,0,Jonna.csv,Dylan,Champan_2019
+baseline,5,0,Jonna.csv,Dylan,Champan_2019
+baseline,6,0,Jonna.csv,Dylan,Champan_2019
+intervention,7,0,Jonna.csv,Dylan,Champan_2019
+intervention,9,0,Jonna.csv,Dylan,Champan_2019
+intervention,10,2,Jonna.csv,Dylan,Champan_2019
+intervention,11,6,Jonna.csv,Dylan,Champan_2019
+intervention,12,2,Jonna.csv,Dylan,Champan_2019
+intervention,13,5,Jonna.csv,Dylan,Champan_2019
+intervention,14,6,Jonna.csv,Dylan,Champan_2019
+intervention,15,7,Jonna.csv,Dylan,Champan_2019
+intervention,16,7,Jonna.csv,Dylan,Champan_2019
+intervention,17,7,Jonna.csv,Dylan,Champan_2019
+intervention,18,7,Jonna.csv,Dylan,Champan_2019
+intervention,19,8,Jonna.csv,Dylan,Champan_2019
+intervention,20,9,Jonna.csv,Dylan,Champan_2019
+intervention,22,8,Jonna.csv,Dylan,Champan_2019
+intervention,23,8,Jonna.csv,Dylan,Champan_2019
+intervention,24,9,Jonna.csv,Dylan,Champan_2019
+intervention,25,9,Jonna.csv,Dylan,Champan_2019
+intervention,26,9,Jonna.csv,Dylan,Champan_2019
+baseline,1,0,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+baseline,2,1,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+baseline,3,-0,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+baseline,16,1,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+baseline,31,1,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,35,4,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,36,4,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,38,5,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,39,2,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,40,3,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,41,3,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,42,6,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,43,2,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,44,5,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,45,6,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,46,7,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+intervention,55,5,Karin Nilsson.csv,Kiernan_Outcome3,Browder_2012
+baseline,1,-0,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+baseline,2,-0,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+baseline,3,-0,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+baseline,16,1,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+baseline,31,1,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+baseline,45,1,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,47,4,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,48,1,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,49,3,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,50,2,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,51,3,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,53,2,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,54,3,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,55,3,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,56,2,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+intervention,57,4,Karin Nilsson.csv,Kiernan_Outcome4,Browder_2012
+baseline,1,4,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+baseline,2,4,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+baseline,4,4,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,5,3,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,13,7,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,14,7,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,16,8,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,17,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,18,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,19,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,24,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,30,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,37,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,50,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+intervention,59,9,Karin Nilsson.csv,Todd_Outcome1,Browder_2012
+baseline,1,5,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+baseline,2,5,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+baseline,3,4,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+baseline,16,2,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,17,4,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,18,5,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,19,4,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,20,6,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,21,7,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,23,7,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,24,6,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,25,10,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,27,9,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,28,8,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,29,9,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,30,10,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,31,9,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,32,9,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,34,10,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,42,10,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+intervention,49,10,Karin Nilsson.csv,Todd_Outcome2,Browder_2012
+baseline,1,2,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+baseline,2,0,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+baseline,3,1,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+baseline,16,1,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+baseline,31,-0,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,35,5,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,36,7,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,37,7,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,38,8,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,40,7,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,42,8,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,43,9,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,45,9,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,47,9,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+intervention,49,8,Karin Nilsson.csv,Todd_Outcome3,Browder_2012
+baseline,1,2,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+baseline,2,0,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+baseline,3,0,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+baseline,16,1,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+baseline,31,1,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,42,1,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,43,7,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,44,8,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,45,10,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,46,10,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,47,10,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,48,10,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+intervention,49,10,Karin Nilsson.csv,Todd_Outcome4,Browder_2012
+baseline,0,30,Karin Nilsson.csv,A,Calik_2010
+baseline,1,30,Karin Nilsson.csv,A,Calik_2010
+baseline,2,31,Karin Nilsson.csv,A,Calik_2010
+intervention,3,71,Karin Nilsson.csv,A,Calik_2010
+intervention,4,81,Karin Nilsson.csv,A,Calik_2010
+intervention,5,71,Karin Nilsson.csv,A,Calik_2010
+intervention,6,82,Karin Nilsson.csv,A,Calik_2010
+intervention,7,81,Karin Nilsson.csv,A,Calik_2010
+intervention,8,91,Karin Nilsson.csv,A,Calik_2010
+intervention,9,101,Karin Nilsson.csv,A,Calik_2010
+intervention,10,101,Karin Nilsson.csv,A,Calik_2010
+intervention,11,101,Karin Nilsson.csv,A,Calik_2010
+baseline,0,40,Karin Nilsson.csv,B,Calik_2010
+baseline,1,40,Karin Nilsson.csv,B,Calik_2010
+baseline,3,40,Karin Nilsson.csv,B,Calik_2010
+intervention,15,79,Karin Nilsson.csv,B,Calik_2010
+intervention,16,78,Karin Nilsson.csv,B,Calik_2010
+intervention,17,90,Karin Nilsson.csv,B,Calik_2010
+intervention,18,79,Karin Nilsson.csv,B,Calik_2010
+intervention,19,90,Karin Nilsson.csv,B,Calik_2010
+intervention,20,90,Karin Nilsson.csv,B,Calik_2010
+intervention,21,100,Karin Nilsson.csv,B,Calik_2010
+intervention,22,100,Karin Nilsson.csv,B,Calik_2010
+intervention,23,100,Karin Nilsson.csv,B,Calik_2010
+baseline,0,29,Karin Nilsson.csv,C,Calik_2010
+baseline,1,29,Karin Nilsson.csv,C,Calik_2010
+baseline,2,29,Karin Nilsson.csv,C,Calik_2010
+intervention,27,79,Karin Nilsson.csv,C,Calik_2010
+intervention,28,88,Karin Nilsson.csv,C,Calik_2010
+intervention,29,79,Karin Nilsson.csv,C,Calik_2010
+intervention,30,79,Karin Nilsson.csv,C,Calik_2010
+intervention,31,88,Karin Nilsson.csv,C,Calik_2010
+intervention,32,98,Karin Nilsson.csv,C,Calik_2010
+intervention,33,98,Karin Nilsson.csv,C,Calik_2010
+intervention,34,98,Karin Nilsson.csv,C,Calik_2010
+intervention,35,97,Karin Nilsson.csv,C,Calik_2010
+baseline,4,0,Karin Nilsson.csv,Dylan,Champan_2019
+baseline,5,0,Karin Nilsson.csv,Dylan,Champan_2019
+baseline,6,0,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,7,0,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,8,0,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,9,2,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,10,6,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,11,2,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,12,5,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,13,6,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,14,7,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,15,7,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,16,7,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,17,7,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,18,8,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,19,9,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,20,8,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,21,8,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,22,9,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,23,9,Karin Nilsson.csv,Dylan,Champan_2019
+intervention,24,9,Karin Nilsson.csv,Dylan,Champan_2019
+baseline,1,-0,Lucija.csv,Kiernan_Outcome3,Browder_2012
+baseline,2,1,Lucija.csv,Kiernan_Outcome3,Browder_2012
+baseline,3,-0,Lucija.csv,Kiernan_Outcome3,Browder_2012
+baseline,16,1,Lucija.csv,Kiernan_Outcome3,Browder_2012
+baseline,31,1,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,35,4,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,36,4,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,38,5,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,39,2,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,40,3,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,41,3,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,42,6,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,43,2,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,44,5,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,45,6,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,46,7,Lucija.csv,Kiernan_Outcome3,Browder_2012
+intervention,55,5,Lucija.csv,Kiernan_Outcome3,Browder_2012
+baseline,1,0,Lucija.csv,Kiernan_Outcome4,Browder_2012
+baseline,2,0,Lucija.csv,Kiernan_Outcome4,Browder_2012
+baseline,3,0,Lucija.csv,Kiernan_Outcome4,Browder_2012
+baseline,16,1,Lucija.csv,Kiernan_Outcome4,Browder_2012
+baseline,31,1,Lucija.csv,Kiernan_Outcome4,Browder_2012
+baseline,45,1,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,47,4,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,48,1,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,49,3,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,50,2,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,51,3,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,52,0,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,53,2,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,54,3,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,55,3,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,56,2,Lucija.csv,Kiernan_Outcome4,Browder_2012
+intervention,57,4,Lucija.csv,Kiernan_Outcome4,Browder_2012
+baseline,1,4,Lucija.csv,Todd_Outcome1,Browder_2012
+baseline,2,4,Lucija.csv,Todd_Outcome1,Browder_2012
+baseline,3,4,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,4,3,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,11,7,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,12,7,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,13,8,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,14,9,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,16,9,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,20,9,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,25,9,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,31,9,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,42,9,Lucija.csv,Todd_Outcome1,Browder_2012
+intervention,49,9,Lucija.csv,Todd_Outcome1,Browder_2012
+baseline,1,5,Lucija.csv,Todd_Outcome2,Browder_2012
+baseline,2,5,Lucija.csv,Todd_Outcome2,Browder_2012
+baseline,3,4,Lucija.csv,Todd_Outcome2,Browder_2012
+baseline,16,2,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,17,4,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,18,5,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,19,4,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,20,6,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,21,7,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,23,7,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,24,6,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,25,10,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,27,9,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,28,8,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,29,9,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,30,10,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,31,9,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,32,9,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,34,10,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,42,10,Lucija.csv,Todd_Outcome2,Browder_2012
+intervention,49,10,Lucija.csv,Todd_Outcome2,Browder_2012
+baseline,1,2,Lucija.csv,Todd_Outcome3,Browder_2012
+baseline,3,1,Lucija.csv,Todd_Outcome3,Browder_2012
+baseline,16,1,Lucija.csv,Todd_Outcome3,Browder_2012
+baseline,31,-0,Lucija.csv,Todd_Outcome3,Browder_2012
+baseline,2,0,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,35,5,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,36,7,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,37,7,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,38,8,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,40,7,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,42,8,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,43,9,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,45,9,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,47,9,Lucija.csv,Todd_Outcome3,Browder_2012
+intervention,49,8,Lucija.csv,Todd_Outcome3,Browder_2012
+baseline,1,2,Lucija.csv,Todd_Outcome4,Browder_2012
+baseline,2,-0,Lucija.csv,Todd_Outcome4,Browder_2012
+baseline,3,-0,Lucija.csv,Todd_Outcome4,Browder_2012
+baseline,16,1,Lucija.csv,Todd_Outcome4,Browder_2012
+baseline,31,1,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,42,1,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,43,7,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,44,8,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,45,10,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,46,10,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,47,10,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,48,10,Lucija.csv,Todd_Outcome4,Browder_2012
+intervention,49,10,Lucija.csv,Todd_Outcome4,Browder_2012
+baseline,1,30,Lucija.csv,A,Calik_2010
+baseline,2,30,Lucija.csv,A,Calik_2010
+baseline,3,30,Lucija.csv,A,Calik_2010
+intervention,3,70,Lucija.csv,A,Calik_2010
+intervention,5,81,Lucija.csv,A,Calik_2010
+intervention,5,70,Lucija.csv,A,Calik_2010
+intervention,7,80,Lucija.csv,A,Calik_2010
+intervention,7,80,Lucija.csv,A,Calik_2010
+intervention,9,91,Lucija.csv,A,Calik_2010
+intervention,9,102,Lucija.csv,A,Calik_2010
+intervention,10,101,Lucija.csv,A,Calik_2010
+intervention,11,101,Lucija.csv,A,Calik_2010
+baseline,1,39,Lucija.csv,B,Calik_2010
+baseline,2,39,Lucija.csv,B,Calik_2010
+baseline,3,39,Lucija.csv,B,Calik_2010
+intervention,16,80,Lucija.csv,B,Calik_2010
+intervention,16,80,Lucija.csv,B,Calik_2010
+intervention,17,89,Lucija.csv,B,Calik_2010
+intervention,19,80,Lucija.csv,B,Calik_2010
+intervention,20,89,Lucija.csv,B,Calik_2010
+intervention,20,89,Lucija.csv,B,Calik_2010
+intervention,21,99,Lucija.csv,B,Calik_2010
+intervention,22,99,Lucija.csv,B,Calik_2010
+intervention,23,100,Lucija.csv,B,Calik_2010
+baseline,1,29,Lucija.csv,C,Calik_2010
+baseline,2,29,Lucija.csv,C,Calik_2010
+baseline,3,29,Lucija.csv,C,Calik_2010
+intervention,27,80,Lucija.csv,C,Calik_2010
+intervention,28,91,Lucija.csv,C,Calik_2010
+intervention,30,80,Lucija.csv,C,Calik_2010
+intervention,31,80,Lucija.csv,C,Calik_2010
+intervention,32,90,Lucija.csv,C,Calik_2010
+intervention,33,100,Lucija.csv,C,Calik_2010
+intervention,34,100,Lucija.csv,C,Calik_2010
+intervention,35,101,Lucija.csv,C,Calik_2010
+intervention,36,100,Lucija.csv,C,Calik_2010
+baseline,4,0,Lucija.csv,Dylan,Champan_2019
+baseline,5,0,Lucija.csv,Dylan,Champan_2019
+baseline,6,0,Lucija.csv,Dylan,Champan_2019
+intervention,7,0,Lucija.csv,Dylan,Champan_2019
+intervention,8,0,Lucija.csv,Dylan,Champan_2019
+intervention,9,2,Lucija.csv,Dylan,Champan_2019
+intervention,10,6,Lucija.csv,Dylan,Champan_2019
+intervention,11,2,Lucija.csv,Dylan,Champan_2019
+intervention,12,5,Lucija.csv,Dylan,Champan_2019
+intervention,13,6,Lucija.csv,Dylan,Champan_2019
+intervention,14,7,Lucija.csv,Dylan,Champan_2019
+intervention,15,7,Lucija.csv,Dylan,Champan_2019
+intervention,16,7,Lucija.csv,Dylan,Champan_2019
+intervention,17,7,Lucija.csv,Dylan,Champan_2019
+intervention,18,8,Lucija.csv,Dylan,Champan_2019
+intervention,19,9,Lucija.csv,Dylan,Champan_2019
+intervention,20,8,Lucija.csv,Dylan,Champan_2019
+intervention,21,8,Lucija.csv,Dylan,Champan_2019
+intervention,22,9,Lucija.csv,Dylan,Champan_2019
+intervention,23,9,Lucija.csv,Dylan,Champan_2019
+intervention,24,9,Lucija.csv,Dylan,Champan_2019
+baseline,1,0,Marta.csv,Kiernan_Outcome3,Browder_2012
+baseline,2,1,Marta.csv,Kiernan_Outcome3,Browder_2012
+baseline,3,0,Marta.csv,Kiernan_Outcome3,Browder_2012
+baseline,16,1,Marta.csv,Kiernan_Outcome3,Browder_2012
+baseline,31,1,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,35,4,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,36,4,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,38,5,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,39,2,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,40,3,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,41,3,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,42,6,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,43,2,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,44,5,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,45,6,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,46,7,Marta.csv,Kiernan_Outcome3,Browder_2012
+intervention,55,5,Marta.csv,Kiernan_Outcome3,Browder_2012
+baseline,1,-0,Marta.csv,Kiernan_Outcome4,Browder_2012
+baseline,2,-0,Marta.csv,Kiernan_Outcome4,Browder_2012
+baseline,3,0,Marta.csv,Kiernan_Outcome4,Browder_2012
+baseline,16,1,Marta.csv,Kiernan_Outcome4,Browder_2012
+baseline,31,1,Marta.csv,Kiernan_Outcome4,Browder_2012
+baseline,45,1,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,47,4,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,48,1,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,49,3,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,50,2,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,51,3,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,52,-0,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,53,2,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,54,3,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,55,3,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,56,2,Marta.csv,Kiernan_Outcome4,Browder_2012
+intervention,57,4,Marta.csv,Kiernan_Outcome4,Browder_2012
+baseline,1,4,Marta.csv,Todd_Outcome1,Browder_2012
+baseline,2,4,Marta.csv,Todd_Outcome1,Browder_2012
+baseline,3,4,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,4,3,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,11,7,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,12,7,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,13,8,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,14,9,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,15,9,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,16,9,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,20,9,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,25,9,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,31,9,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,42,9,Marta.csv,Todd_Outcome1,Browder_2012
+intervention,49,9,Marta.csv,Todd_Outcome1,Browder_2012
+baseline,1,5,Marta.csv,Todd_Outcome2,Browder_2012
+baseline,2,5,Marta.csv,Todd_Outcome2,Browder_2012
+baseline,3,4,Marta.csv,Todd_Outcome2,Browder_2012
+baseline,16,2,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,17,4,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,18,5,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,19,4,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,20,6,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,21,7,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,23,7,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,24,6,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,25,10,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,27,9,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,28,8,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,29,9,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,30,10,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,31,9,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,32,9,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,34,10,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,42,10,Marta.csv,Todd_Outcome2,Browder_2012
+intervention,49,10,Marta.csv,Todd_Outcome2,Browder_2012
+baseline,1,2,Marta.csv,Todd_Outcome3,Browder_2012
+baseline,2,-0,Marta.csv,Todd_Outcome3,Browder_2012
+baseline,3,1,Marta.csv,Todd_Outcome3,Browder_2012
+baseline,16,1,Marta.csv,Todd_Outcome3,Browder_2012
+baseline,31,0,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,35,5,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,36,7,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,37,7,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,38,8,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,40,7,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,42,8,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,43,9,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,45,9,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,47,9,Marta.csv,Todd_Outcome3,Browder_2012
+intervention,49,8,Marta.csv,Todd_Outcome3,Browder_2012
+baseline,1,2,Marta.csv,Todd_Outcome4,Browder_2012
+baseline,2,-0,Marta.csv,Todd_Outcome4,Browder_2012
+baseline,3,0,Marta.csv,Todd_Outcome4,Browder_2012
+baseline,16,1,Marta.csv,Todd_Outcome4,Browder_2012
+baseline,31,1,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,42,1,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,43,7,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,44,8,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,45,10,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,46,10,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,47,10,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,48,10,Marta.csv,Todd_Outcome4,Browder_2012
+intervention,49,10,Marta.csv,Todd_Outcome4,Browder_2012
+baseline,0,30,Marta.csv,A,Calik_2010
+baseline,2,30,Marta.csv,A,Calik_2010
+baseline,3,29,Marta.csv,A,Calik_2010
+intervention,3,71,Marta.csv,A,Calik_2010
+intervention,5,81,Marta.csv,A,Calik_2010
+intervention,5,70,Marta.csv,A,Calik_2010
+intervention,6,81,Marta.csv,A,Calik_2010
+intervention,8,81,Marta.csv,A,Calik_2010
+intervention,8,90,Marta.csv,A,Calik_2010
+intervention,9,100,Marta.csv,A,Calik_2010
+intervention,11,100,Marta.csv,A,Calik_2010
+intervention,11,100,Marta.csv,A,Calik_2010
+baseline,0,40,Marta.csv,B,Calik_2010
+baseline,2,40,Marta.csv,B,Calik_2010
+baseline,3,41,Marta.csv,B,Calik_2010
+intervention,16,80,Marta.csv,B,Calik_2010
+intervention,17,80,Marta.csv,B,Calik_2010
+intervention,18,90,Marta.csv,B,Calik_2010
+intervention,19,79,Marta.csv,B,Calik_2010
+intervention,20,90,Marta.csv,B,Calik_2010
+intervention,20,90,Marta.csv,B,Calik_2010
+intervention,22,100,Marta.csv,B,Calik_2010
+intervention,23,100,Marta.csv,B,Calik_2010
+intervention,24,100,Marta.csv,B,Calik_2010
+baseline,0,29,Marta.csv,C,Calik_2010
+baseline,1,31,Marta.csv,C,Calik_2010
+baseline,2,31,Marta.csv,C,Calik_2010
+intervention,27,80,Marta.csv,C,Calik_2010
+intervention,28,90,Marta.csv,C,Calik_2010
+intervention,29,81,Marta.csv,C,Calik_2010
+intervention,31,81,Marta.csv,C,Calik_2010
+intervention,31,90,Marta.csv,C,Calik_2010
+intervention,32,100,Marta.csv,C,Calik_2010
+intervention,33,100,Marta.csv,C,Calik_2010
+intervention,34,100,Marta.csv,C,Calik_2010
+intervention,36,100,Marta.csv,C,Calik_2010
+baseline,4,0,Marta.csv,Dylan,Champan_2019
+baseline,5,0,Marta.csv,Dylan,Champan_2019
+baseline,6,0,Marta.csv,Dylan,Champan_2019
+intervention,8,0,Marta.csv,Dylan,Champan_2019
+intervention,9,0,Marta.csv,Dylan,Champan_2019
+intervention,10,2,Marta.csv,Dylan,Champan_2019
+intervention,11,6,Marta.csv,Dylan,Champan_2019
+intervention,12,2,Marta.csv,Dylan,Champan_2019
+intervention,13,5,Marta.csv,Dylan,Champan_2019
+intervention,14,6,Marta.csv,Dylan,Champan_2019
+intervention,15,7,Marta.csv,Dylan,Champan_2019
+intervention,16,7,Marta.csv,Dylan,Champan_2019
+intervention,17,7,Marta.csv,Dylan,Champan_2019
+intervention,18,7,Marta.csv,Dylan,Champan_2019
+intervention,19,8,Marta.csv,Dylan,Champan_2019
+intervention,20,9,Marta.csv,Dylan,Champan_2019
+intervention,22,8,Marta.csv,Dylan,Champan_2019
+intervention,23,8,Marta.csv,Dylan,Champan_2019
+intervention,24,9,Marta.csv,Dylan,Champan_2019
+intervention,25,9,Marta.csv,Dylan,Champan_2019
+intervention,26,9,Marta.csv,Dylan,Champan_2019

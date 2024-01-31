@@ -16,7 +16,7 @@ Project Root
 # Graph data extraction instructions
 Pre-requisites
 Ensure all graphs are named following the format: 
-"author_year-case_number.png" or "author_year-case_number.jpg".
+"author_year-casename.png" or "author_year-casename.jpg".
 
 Steps
 

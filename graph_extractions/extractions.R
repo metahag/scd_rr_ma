@@ -1,7 +1,7 @@
 library(metaDigitise)
 library(tidyverse)
 
-## IMPORTANT: name all graphs as follows: author_year-case_number.png or author_year-case_number.jpg
+## IMPORTANT: name all graphs as follows: author_year-casename.png or author_year-casename.jpg
 
 # import data from a folder containing all graphs
 data <- metaDigitise(dir = "graph_extractions") # this needs to point to a folder where there are pictures to be digitised 
