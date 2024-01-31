@@ -32,7 +32,15 @@ library(brms)
 
 ```{r data}
 #| echo = FALSE
-data <- read_csv("studies_meta.csv") %>% mutate(across(c(1:5), ~as_factor(.)))
+data <- read_csv("reliability_df.csv") %>% filter(filename == "Emil.csv")
+
+# separate the plot by filtering only the intervention points
+# calculate mean from the baseline points
+
+data %>% filter(id == "intervention") %>% ggplot(aes(x = x_round, y = y_round, color = case)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~study, ncol = 3)
 
 ```
 
