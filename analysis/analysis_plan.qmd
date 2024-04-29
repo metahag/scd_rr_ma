@@ -3,66 +3,330 @@ title: "Analysis plan"
 author: "Lucija Batinović"
 format: html
 editor: source
+execute: 
+  echo: FALSE
+  message: FALSE
+  warning: FALSE
+  error: FALSE
 ---
+
 
 ## Model specifications
 
-As the reporting conventions of single-case designs allow for raw data extraction, we will take advantage of this opportunity and conduct an individual-participant multilevel meta-analysis. Having access to raw data allows for greater flexibility in modeling variations between and within participants, which is of even greater importance in single-case designs, considering the low sample size and often very few data points. For that reason, we will conduct a Bayesian meta-analysis. 
+As the reporting conventions of single-case designs allow for raw data extraction, we will take advantage of this opportunity and conduct an indivIDual-participant multilevel meta-analysis. Having access to raw data allows for greater flexibility in modeling variations between and within participants, which is of even greater importance in single-case designs, consIDering the low sample size and often very few data points. For that reason, we will model a Bayesian meta-analysis. 
+There are multiple crucial assumptions to make when modeling time-series (i.e., repeated measures) designs: distribution of the outcome measure, time trends, autoregression, etc. There is little consensus on how to best approach dealing with outcome measures in single-case designs. Most commonly used effect size measures in SCD research belong to non-parametric effect size measures, e.g., PND (percentage of non-overlap data), LRR (logistic response ratio) and more recently developed parametric alternatives, e.g., WS-SMD and BS-SMD (standardized mean differences; developed to be comparable to group-design studies). These parametric effect size measures, although robust when assumptions cannot be certainly defined, generally assume non-existing time trends and autoregression, with a normal distribution of outcome measures (cite Pustejovsky). Shadish (cite the scd study) found that autocorrelation size is inconclusive, albeit non-negligible, particularly in multiple-baseline designs. Furthermore, assuming normal distribution of the outcome measures is a risky feat in a research area that heavily utilizes counts and percentages as measures, which would be more appropriately explained under the Poisson or otherwise binomial families of distributions. We will further break down each parameter that will go into the model, justifying the final decisions for each one.
 
-There are multiple crucial assumptions to make when modeling time-series (i.e., repeated measures) designs: distribution of the outcome measure, time trends, autoregression, etc. There is little consensus on how to best approach dealing with outcome measures in single-case designs. Most commonly used effect size measures in SCD research belong to non-parametric effect measures, e.g., PND (percentage of non-overlap data), LRR (logistic response ratio) and more recently developed parametric alternatives, e.g., WS-SMD and BS-SMD (standardized mean differences; developed to be comparable to group research). These parametric effect size measures, although robust when assumptions cannot be certainly defined, generally assume non-existing time trends and autoregression, with a normal distribution of outcome measures (cite Pustejovsky). Shadish (cite the scd study) found that autocorrelation size is inconclusive, albeit non-negligible, particularly in multiple-baseline designs. Furthermore, assuming normal distribution of the outcome measures is a risky feat in a research area that heavily utilizes counts and percentages as measures, which would be more appropriately explained under the Poisson family of distributions. We will further break down each parameter that will go into the model, justifying the final decisions for each one.
+
+### Clusters 
+Generally, we use beta(binomial) distributions to explain the data that is collected in trials and regarded as the number or rate of success(es) in a trial. Often, this can be seen in medical research on survival rates, or educational testing data. However, those trials are most often independent. In our case, the trials are sessions in a repeated-measure design, which makes the nested within participants. Without having to scale it further, this requires a hierarchical modelling to account for interdependence of these observations. A single case design then requires modelling between participant average to reach an effect size. That is our third level - study level, where the participants are nested within a study. Finally, as we want to meta-analyze findings from various studies, we calculate the population average effect based on the information from multiple studies. This leads us to the final, fourth level of this model that accounts for between study variation.
+We are employing a random-intercept model on each level, with the first level being modeled as random due to the beta-binomial distribution accounting for over-dispersion by essentially allowing random probabilities for each trial.  
+
+Figure 1 depicts the hierarchical model. 
+![Hierarchical Model](model_five_levels.png){wIDth=500, height=500}
+
+
 
 #### Outcome
-Level one of the multilevel model describes the relationship between the outcome - word or non-word reading, and the predictor - intervention. Informed by previous reviews with similar interest, we assume majority of the studies will employ non-standardized word-reading tests, with counts and percentages as measures, and fixed word lists. If we considered the trials to be independent, binomial or Poisson distribution would potentially be the most appropriate model for the outcome. However, as we assume the existence of autocorrelation and knowledge transfer, we cannot assume the trials are independent. To allow for greater flexibility and account for over-dispersion (i.e., variance being larger than the mean), the outcome will be modeled under the negative binomial distribution. 
+Level one of the multilevel model describes the relationship between the outcome - word or non-word reading, and the predictor - reading intervention. Informed by previous reviews with similar interest, we assume majority of the studies will employ non-standardized word-reading tests, with counts and percentages as measures, and fixed word lists. If we consIDered the trials to be independent, binomial or Poisson distribution would potentially be the most appropriate model for the outcome. *However, as we assume the existence of autocorrelation and knowledge transfer, we cannot assume the trials are independent*. To allow for greater flexibility and account for over-dispersion (i.e., variance being larger than the mean), and to account for unavailable raw counts in instances where the studies present proportion of correct responses, we will model the outcome under the beta-binomial distribution (Gelman et al., 2020).
 
-This sets the beginning function as:
+This sets the starting equation as:
+$$
+Y_{i} \sim BetaBin(N,\mu,\theta)
+$$
+Beta-binomial distribution can be explained as a binomial distribution that gets its probability parameter informed by the beta distribution of probabilities. Here $Y_{i}$  is the number or rate of correct responses for each indivIDual i = 1, ..., n, $BetaBin$ indicates the observations are drawn from a beta-binomial distribution which has the $N$ parameter for the number of trials, $\mu$ for the average probability (McElreath denotes this as pbar but that is confusing imo) of the beta distribution and $\theta$ as the dispersion (precision) parameter of the beta distribution (I took McElreath's notation for this parameter, but others (i.e., Buerkner) note it as $\phi$).
+In case we had a dataset that contains observations of correct responses that is not nested within participants, classes, studies, schools, etc., this equation would be our model. One thing we would have to specify for the Bayesian model would be the priors for the distribution parameters.
 
 $$
-Y_{ij} = \beta_0 + \beta_1*Phase + \epsilon
+Y_{i} \sim BetaBin(N,\mu,\theta) 
 $$
 $$
-\epsilon \sim N(0,\sigma^2)
+logit(\mu) = \alpha_{treatment[i]}
 $$
-Where: $Y_{ij}$  is the outcome for _i_ case in _j_ study. $\beta_0$  represents the intercept, which is the baseline phase, and $\beta_1$  represents the slope, which is the change in the outcome after the intervention is implemented. When the phase is 0, the outcome is the intercept, i.e., the baseline level. 
+$$
+\alpha \sim Normal(0, 1.5)
+$$
+$$
+\theta \sim gamma(0.1,0.1)
+$$
+We take the first function and add a prior for the average probability parameter ($\mu$) which is a log odds probability of success ($\alpha_{treatment[i]}$), with the $treatment$ index implying whether it's baseline or intervention. We draw the $\alpha$ from a normal distribution with a $mean$ of 0 and $SD$ of 1.5. This distribution is arbitrary, we can assume that the odds parameter can be drawn from a normal distribution, but parameters are up to us to define based on previous knowledge.
 
+Now, we have the model that would explain how we get the observation. To calculate the effect for our meta-analysis, we need to account for clusters on the levels we specified in the beginning: participant and study. There are two ways to approach when we have raw data - calculate average effects per study and do a meta-analysis of those effects (which is the common way of conducting a meta-analysis when you don't have raw data) or build a model that directly calculates the population (average) effect from the raw data. We will do the latter, one stage approach.
+
+We start with the same equation in the first line:
+
+$$
+Y_{i} \sim BetaBin(N,\mu,\theta) \\
+$$
+$$
+logit(\mu) = \alpha_{treatment[i]} + g_{participant[i]} + g_{study[i]}
+$$
+
+Here, $\alpha_{treatment[i]}$ is modeled as:
+$$
+\alpha_{treatment[i]} = \alpha_0 + \alpha_1 × Treatment_[i]
+$$
+where $\alpha_0$ is the baseline log odds of success when no treatment is applied, and $\alpha_1$ represents the change in log odds due to the treatment. The term $Treatment_[i]$ is a variable indicating baseline or intervention stage.
+
+$$
+\alpha \sim Cauchy(\mu_{study},\sigma_{study})
+$$
+
+$$
+\mu_{study} \sim Cauchy(\mu_{pop},\sigma_{pop})
+$$
+$$
+\sigma_{study} \sim HalfStudent(\nu_{pop}, \mu_{pop},\sigma_{pop})
+$$
+
+$$
+\mu_{pop} \sim Student(3, 0, 1)
+$$
+
+$$
+\sigma_{pop} \sim HalfStudent(7, 0, 3)
+$$
+
+$$
+\textbf{R} \sim LKJcorr(2)
+$$
+
+$$
+\theta = \Phi
+$$
+$$
+\Phi \sim gamma(3,3)
+$$
+
+The multilevel model now specifies random effects on the participant ($g_{participant[i]}$) and study level ($g_{study[i]}$). We also define parameters for priors for the means and standard deviations. As these effects are interdependent, the model also produces a correlation matrix to explain the covariance. 
+
+LKJ, the Lewandowski-Kurowicka-Joe distribution is a probability distribution over positive-definite symmetric matrices with unit diagonals, i.e., correlation matrices (Gelman, 2020). We use this distribution as a prior for the correlation matrix of effects in the model, and set it as $LKJcorr(2)$ of 2, which makes extreme correlations less likely in the correlation matrix, but still allows for correlations between the effects. 
+
+We draw standard deviations from the half-student-t distributions, instead of normal, as it allows the possibility of extreme (tail) values, which helps us accommodate to uncertainty of these values. By defining it as "half", we constrain the distribution only to positive values for the SD.
+
+Given the way that the designs are bounding the possible answers to a small range, and often conduct interventions until 100% success rate is achieved, we can expect ceiling effects, large effects in the intervention phase and larger improvements (slope) for those with lower baseline results.   
+
+### 
 ```{r}
-#| echo = FALSE
 library(tidyverse)
 library(brms)
+library(tidybayes)
+library(bayesplot)
+library(rstanarm)
+set.seed(2024)
 ```
 
 ```{r data}
-#| echo = FALSE
-data <- read_csv("reliability_df.csv") %>% filter(filename == "Emil.csv")
+#data <- read_csv("reliability_df.csv") %>% filter(filename == "Emil.csv",
+#                                                  study != "Calik_2010") %>% 
+#  mutate(success_counts = round(y, digits = 0)) %>% mutate(success_rate = (success_counts / 10)*100) %>% 
+#  mutate(fail_rate = (100 - success_rate)) %>% 
+#  mutate(ID = as.factor(ID),
+#         case = as.factor(case),
+#         study = as.factor(study))
+#
+## separate the plot by filtering only the intervention points
+## calculate mean from the baseline points
+#
+#data %>% filter(ID == "intervention") %>% ggplot(aes(x = x, y = success_rate, color = case)) +
+#  geom_point() +
+#  geom_line() +
+#  facet_wrap(~study, ncol = 3)
 
-# separate the plot by filtering only the intervention points
-# calculate mean from the baseline points
+data <- read_csv("mydata.csv") %>% 
+  mutate(success_rate = round(success_rate*100, digits = 0),
+         fail_rate = round(abs(fail_rate)*100, digits = 0)) %>% 
+  filter(ID != "Maintenance")
 
-data %>% filter(id == "intervention") %>% ggplot(aes(x = x_round, y = y_round, color = case)) +
-  geom_point() +
-  geom_line() +
-  facet_wrap(~study, ncol = 3)
 
 ```
 
 ```{r baes-model}
-#| echo = FALSE
+#| output: FALSE
+# "0 + variable" removes the intercept, i.e., shows a separate coefficient for the "ref" group (baseline) and the comparison, vs. having the average intercept and then the difference between groups - it also removes centering parametrization and I want to avoid that so keep in the intercept
+# note, this data does not discern multiple measurements for the same participant - needs to be added
+prior <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
+                   data = data, family = beta_binomial())
 
+model_one <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
+                 data = data, family = beta_binomial(link = "logit"),
+                 prior = prior, warmup = 2000, iter = 4000,
+                 control = list(adapt_delta = 0.9) # trying to fix divergent transitions, there are a few only
+          )
 
-#baes <- brms::brm(formula = y ~ phase + session + ( 1 | phase/session) + #ar(time = session, p = 1), #fixed effect within case; autoregression order 1
-#                       family = negbinomial(),# neg binomial
-#                       data = data,
-#                  seed = 2023) # 
-#
-#summary(baes)
 
 ```
 
-```{r freaks-model}
-#| echo = FALSE
-#freaks <- brms::brm(formula = outcome ~ phase + session + ( 1 | phase/session) + ar(time = session, p = 1), #fixed effect within case; autoregression order 1
-#                     family = gaussian(), # outcome distribution considered gaussian
-#                     data = data) 
+```{r baes-plots}
+#get_variables(model_one)
+#model_one %<>% recover_types(data)
+summary(model_one)
 
-#summary(freaks)
+#posterior predictive check for baseline and intervention fit
+pp_check(model_one, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+
+#stancode(model_one, data = data, family = beta_binomial(link = "logit"),
+#                 prior = prior)
+#general plots
+plot(model_one)
+#
+model_one %>%
+  spread_draws(r_case[case,IDIntervention], b_IDIntervention) %>%
+  mutate(case_mean = exp(b_IDIntervention) + exp(r_case)) %>%
+  ggplot(aes(y = case, x = case_mean)) +
+  stat_halfeye(color = "#ff0040", fill = "#ffcedb") +
+  theme_minimal() +
+  coord_cartesian(xlim = c(-80,80))
+
+
+
+```
+
+```{r baes-model-two}
+#| output: FALSE
+prior_two <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
+                   data = data, family = beta_binomial())
+
+prior_two$prior[2] <- "cauchy(0, 1)" #baseline values?
+prior_two$prior[3] <- "lkj(2)" # to keep higher correlations less likely
+prior_two$prior[6] <- "cauchy(0, 2.5)" # general consensus seems to be in favor of student t for all, both intercept and sd
+prior_two$prior[7] <- "gamma(3,3)" # phi prior, recommended against the gamma for binomial families but seems to work better than student/normal/cauchy
+prior_two$prior[8] <- "student_t(7, 0, 3)" # apparently we should avoid cauchy for sd as it leads to implausibly large values https://statmodeling.stat.columbia.edu/2018/04/03/justify-my-love/
+
+model_two <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
+                 data = data, family = beta_binomial(link = "logit"),
+                 prior = prior_two, warmup = 2000, iter = 4000,
+                 control = list(adapt_delta = 0.9) # trying to fix divergent transitions, there are a few only
+          )
+
+```
+
+```{r baes-plots-two}
+
+summary(model_two)
+
+#posterior predictive check for baseline and intervention fit
+pp_check(model_two, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+#get_variables(model_one)
+#model_one %<>% recover_types(data)
+color_scheme_set("orange")
+posterior_two <- as.matrix(model_two)
+
+plot_title <- ggtitle("Posterior distributions",
+                      "with medians and 90% intervals")
+mcmc_areas(posterior_two,
+           pars = c("b_Intercept", "b_IDIntervention", "sd_case__IDIntervention", "sd_case:study__IDIntervention", "phi"),
+           prob = 0.9) + plot_title
+#general plots
+plot(model_two)
+#
+model_two %>%
+  spread_draws(r_case[case,IDIntervention], b_IDIntervention) %>%
+  mutate(case_mean = exp(b_IDIntervention) + exp(r_case)) %>%
+  ggplot(aes(y = case, x = case_mean)) +
+  stat_halfeye(color = "magenta", fill = "pink") +
+  theme_minimal() +
+  coord_cartesian(xlim = c(-80,80))
+
+```
+
+```{r comparison-model}
+
+# WAIC treats observations as independent, so I'm not sure this is correct or how to even interpret the value 
+model_one_ic <- add_criterion(model_one, criterion = "loo")
+model_one_waic <- waic(model_one)
+model_two_ic <- add_criterion(model_two, criterion = "loo")
+model_two_waic <- waic(model_two)
+
+w <- loo_compare(model_one_waic, model_two_waic) 
+print(w, simplify = F) # seems like the default priors produce a better model but mine looks prettier :(
+
+l <- loo_compare(model_one_ic, model_two_ic) # leave-one-out cross validation
+print(l, simplify = F)
+```
+
+
+### Moderators
+#### Gender
+```{r baes-model-gender}
+#prior_gender <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + gender), 
+#                   data = data, family = beta_binomial())
+#
+#model_gender <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + gender), 
+#                 data = data, family = beta_binomial(link = "logit"),
+#                 prior = prior_gender, warmup = 1000, iter = 4000
+#          )
+#
+#summary(model_gender)
+#
+##posterior predictive check for baseline and intervention fit
+#pp_check(model_gender, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+```
+
+```{r baes-plots-gender}
+#| echo: FALSE
+#| message: FALSE
+#| warning: FALSE
+#| error: FALSE
+#get_variables(model_one)
+#model_one %<>% recover_types(data)
+
+#general plots
+#plot(model_gender)
+##
+#model_gender %>%
+#  spread_draws(r_case[case,IDIntervention], b_IDIntervention) %>%
+#  mutate(case_mean = b_IDIntervention + r_case) %>%
+#  ggplot(aes(y = case, x = case_mean)) +
+#  stat_halfeye(color = "magenta", fill = "pink") +
+#  theme_minimal() 
+
+```
+
+
+#### IQ
+```{r baes-model-iq}
+#prior_iq <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + IQ), 
+#                   data = data, family = beta_binomial())
+#
+#
+#model_iq <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + IQ), 
+#                 data = data, family = beta_binomial(link = "logit"),
+#                 prior = prior_iq, warmup = 1000, iter = 4000
+#          )
+#
+#summary(model_iq)
+#
+##posterior predictive check for baseline and intervention fit
+#pp_check(model_iq, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+#
+#plot(model_iq)
+```
+
+#### SCD type 
+Moderating effect of the type of single-case design (this variable is missing in the dataset) - I would rather have separate meta-analyses on each design type in case this makes a difference. Some designs are conceptually different (e.g. multiple baseline vs multiple probes) and I don't know if it makes sense to interpret results that come from combining them. 
+```{r}
+#prior_iq <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + study_design), 
+#                   data = data, family = beta_binomial())
+#
+#
+#model_iq <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + study_design), 
+#                 data = data, family = beta_binomial(link = "logit"),
+#                 prior = prior_iq, warmup = 1000, iter = 4000
+#          )
+#
+#summary(model_iq)
+#
+##posterior predictive check for baseline and intervention fit
+#pp_check(model_iq, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+#
+#plot(model_iq)
+```
+
+
+
+#### Risk of Bias sensitivity analysis
+```{r loo-rob}
+# do a sensitivity analysis based on risk of bias assessment
+# data_rob <- data %>% filter(rob != "high")
 ```
 
