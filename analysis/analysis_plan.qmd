@@ -1,7 +1,7 @@
 ---
 title: "Analysis plan"
 author: "Lucija Batinović"
-format: html
+format: docx
 editor: source
 execute: 
   echo: FALSE
@@ -13,8 +13,8 @@ execute:
 
 ## Model specifications
 
-As the reporting conventions of single-case designs allow for raw data extraction, we will take advantage of this opportunity and conduct an indivIDual-participant multilevel meta-analysis. Having access to raw data allows for greater flexibility in modeling variations between and within participants, which is of even greater importance in single-case designs, consIDering the low sample size and often very few data points. For that reason, we will model a Bayesian meta-analysis. 
-There are multiple crucial assumptions to make when modeling time-series (i.e., repeated measures) designs: distribution of the outcome measure, time trends, autoregression, etc. There is little consensus on how to best approach dealing with outcome measures in single-case designs. Most commonly used effect size measures in SCD research belong to non-parametric effect size measures, e.g., PND (percentage of non-overlap data), LRR (logistic response ratio) and more recently developed parametric alternatives, e.g., WS-SMD and BS-SMD (standardized mean differences; developed to be comparable to group-design studies). These parametric effect size measures, although robust when assumptions cannot be certainly defined, generally assume non-existing time trends and autoregression, with a normal distribution of outcome measures (cite Pustejovsky). Shadish (cite the scd study) found that autocorrelation size is inconclusive, albeit non-negligible, particularly in multiple-baseline designs. Furthermore, assuming normal distribution of the outcome measures is a risky feat in a research area that heavily utilizes counts and percentages as measures, which would be more appropriately explained under the Poisson or otherwise binomial families of distributions. We will further break down each parameter that will go into the model, justifying the final decisions for each one.
+As the reporting conventions of single-case designs allow for raw data extraction, we will take advantage of this opportunity and conduct an individual-participant multilevel meta-analysis. Having access to raw data allows for greater flexibility in modeling variations between and within participants, which is of even greater importance in single-case designs, considering the low sample size and often very few data points. For that reason, we will model a Bayesian meta-analysis. 
+There are multiple crucial assumptions to make when modeling time-series (i.e., repeated measures) designs: distribution of the outcome measure, time trends, autoregression, etc. There is little consensus on how to best approach dealing with outcome measures in single-case designs. Most commonly used effect size measures in SCD research belong to non-parametric effect size measures, e.g., PND (percentage of non-overlap data), LRR (logistic response ratio) and more recently developed parametric alternatives, e.g., WS-SMD and BS-SMD (standardized mean differences; developed to be comparable to group-design studies). These parametric effect size measures, although robust when assumptions cannot be certainly defined, generally assume non-existing time trends and autoregression, with a normal distribution of outcome measures (Pustejovsky, ). Shadish et al. ( 2008) found that autocorrelation size is inconclusive, albeit non-negligible, particularly in multiple-baseline designs. Furthermore, assuming normal distribution of the outcome measures is a risky feat in a research area that heavily utilizes counts and percentages as measures, which would be more appropriately explained under the Poisson or otherwise binomial families of distributions. We will further break down each parameter that will go into the model, justifying the final decisions for each one.
 
 
 ### Clusters 
@@ -27,13 +27,13 @@ Figure 1 depicts the hierarchical model.
 
 
 #### Outcome
-Level one of the multilevel model describes the relationship between the outcome - word or non-word reading, and the predictor - reading intervention. Informed by previous reviews with similar interest, we assume majority of the studies will employ non-standardized word-reading tests, with counts and percentages as measures, and fixed word lists. If we consIDered the trials to be independent, binomial or Poisson distribution would potentially be the most appropriate model for the outcome. *However, as we assume the existence of autocorrelation and knowledge transfer, we cannot assume the trials are independent*. To allow for greater flexibility and account for over-dispersion (i.e., variance being larger than the mean), and to account for unavailable raw counts in instances where the studies present proportion of correct responses, we will model the outcome under the beta-binomial distribution (Gelman et al., 2020).
+Level one of the multilevel model describes the relationship between the outcome - word or non-word reading, and the predictor - reading intervention. Informed by previous reviews with similar interest, we assume majority of the studies will employ non-standardized word-reading tests, with counts and percentages as measures, and fixed word lists. If we considered the trials to be independent, binomial or Poisson distribution would potentially be the most appropriate model for the outcome. However, as we assume the existence of autocorrelation (but will not model it explicitly) and knowledge transfer, we cannot assume the trials are independent. To allow for greater flexibility and account for over-dispersion (i.e., variance being larger than the mean), and to account for unavailable raw counts in instances where the studies present proportion of correct responses, we will model the outcome under the beta-binomial distribution (Gelman et al., 2020).
 
 This sets the starting equation as:
 $$
 Y_{i} \sim BetaBin(N,\mu,\theta)
 $$
-Beta-binomial distribution can be explained as a binomial distribution that gets its probability parameter informed by the beta distribution of probabilities. Here $Y_{i}$  is the number or rate of correct responses for each indivIDual i = 1, ..., n, $BetaBin$ indicates the observations are drawn from a beta-binomial distribution which has the $N$ parameter for the number of trials, $\mu$ for the average probability (McElreath denotes this as pbar but that is confusing imo) of the beta distribution and $\theta$ as the dispersion (precision) parameter of the beta distribution (I took McElreath's notation for this parameter, but others (i.e., Buerkner) note it as $\phi$).
+Beta-binomial distribution can be explained as a binomial distribution that has its probability parameter informed by the beta distribution of probabilities. Here $Y_{i}$  is the number or rate of correct responses for each indivIDual i = 1, ..., n, $BetaBin$ indicates the observations are drawn from a beta-binomial distribution which has the $N$ parameter for the number of trials, $\mu$ for the average probability (Some authors denote it as pbar; McElreath, 2020) of the beta distribution and $\theta$ as the dispersion (precision) parameter of the beta distribution (some authors might note it as $\phi$; Burkner, 2017).
 In case we had a dataset that contains observations of correct responses that is not nested within participants, classes, studies, schools, etc., this equation would be our model. One thing we would have to specify for the Bayesian model would be the priors for the distribution parameters.
 
 $$
@@ -48,14 +48,14 @@ $$
 $$
 \theta \sim gamma(0.1,0.1)
 $$
-We take the first function and add a prior for the average probability parameter ($\mu$) which is a log odds probability of success ($\alpha_{treatment[i]}$), with the $treatment$ index implying whether it's baseline or intervention. We draw the $\alpha$ from a normal distribution with a $mean$ of 0 and $SD$ of 1.5. This distribution is arbitrary, we can assume that the odds parameter can be drawn from a normal distribution, but parameters are up to us to define based on previous knowledge.
+We take the first function and add a prior for the average probability parameter ($\mu$) which is a log odds probability of success ($\alpha_{treatment[i]}$), with the $treatment$ index implying whether it's baseline or intervention. We draw the $\alpha$ from a normal distribution with a $mean$ of 0 and $SD$ of 1.5. The choice of the distribution is relatively arbitrary, we can assume that the odds parameter can be drawn from a normal distribution, but parameters are up to us to define based on previous knowledge.
 
 Now, we have the model that would explain how we get the observation. To calculate the effect for our meta-analysis, we need to account for clusters on the levels we specified in the beginning: participant and study. There are two ways to approach when we have raw data - calculate average effects per study and do a meta-analysis of those effects (which is the common way of conducting a meta-analysis when you don't have raw data) or build a model that directly calculates the population (average) effect from the raw data. We will do the latter, one stage approach.
 
 We start with the same equation in the first line:
 
 $$
-Y_{i} \sim BetaBin(N,\mu,\theta) \\
+Y_{i} \sim BetaBin(N,\mu,\theta)
 $$
 $$
 logit(\mu) = \alpha_{treatment[i]} + g_{participant[i]} + g_{study[i]}
@@ -104,6 +104,7 @@ LKJ, the Lewandowski-Kurowicka-Joe distribution is a probability distribution ov
 We draw standard deviations from the half-student-t distributions, instead of normal, as it allows the possibility of extreme (tail) values, which helps us accommodate to uncertainty of these values. By defining it as "half", we constrain the distribution only to positive values for the SD.
 
 Given the way that the designs are bounding the possible answers to a small range, and often conduct interventions until 100% success rate is achieved, we can expect ceiling effects, large effects in the intervention phase and larger improvements (slope) for those with lower baseline results.   
+
 
 ### 
 ```{r}
