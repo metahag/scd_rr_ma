@@ -14,7 +14,7 @@ execute:
 ## Model specifications
 
 As the reporting conventions of single-case designs allow for raw data extraction, we will take advantage of this opportunity and conduct an individual-participant multilevel meta-analysis. Having access to raw data allows for greater flexibility in modeling variations between and within participants, which is of even greater importance in single-case designs, considering the low sample size and often very few data points. For that reason, we will model a Bayesian meta-analysis. 
-There are multiple crucial assumptions to make when modeling time-series (i.e., repeated measures) designs: distribution of the outcome measure, time trends, autoregression, etc. There is little consensus on how to best approach dealing with outcome measures in single-case designs. Most commonly used effect size measures in SCD research belong to non-parametric effect size measures, e.g., PND (percentage of non-overlap data), LRR (logistic response ratio) and more recently developed parametric alternatives, e.g., WS-SMD and BS-SMD (standardized mean differences; developed to be comparable to group-design studies). These parametric effect size measures, although robust when assumptions cannot be certainly defined, generally assume non-existing time trends and autoregression, with a normal distribution of outcome measures (Pustejovsky, ). Shadish et al. ( 2008) found that autocorrelation size is inconclusive, albeit non-negligible, particularly in multiple-baseline designs. Furthermore, assuming normal distribution of the outcome measures is a risky feat in a research area that heavily utilizes counts and percentages as measures, which would be more appropriately explained under the Poisson or otherwise binomial families of distributions. We will further break down each parameter that will go into the model, justifying the final decisions for each one.
+There are multiple crucial assumptions to make when modeling time-series (i.e., repeated measures) designs: distribution of the outcome measure, time trends, autoregression, etc. There is little consensus on how to best approach dealing with outcome measures in single-case designs. Most commonly used effect size measures in SCD research belong to non-parametric effect size measures, e.g., PND (percentage of non-overlap data), LRR (logistic response ratio) and more recently developed parametric alternatives, e.g., WS-SMD and BS-SMD (standardized mean differences; developed to be comparable to group-design studies). These parametric effect size measures, although robust when assumptions cannot be certainly defined, generally assume non-existing time trends and autoregression, with a normal distribution of outcome measures (Pustejovsky, 2017). Shadish et al. (2011) found that autocorrelation size is inconclusive, albeit non-negligible, particularly in multiple-baseline designs. Furthermore, assuming normal distribution of the outcome measures is a risky feat in a research area that heavily utilizes counts and percentages as measures, which would be more appropriately explained under the Poisson or otherwise binomial families of distributions. We will further break down each parameter that will go into the model, justifying the final decisions for each one.
 
 
 ### Clusters 
@@ -22,7 +22,7 @@ Generally, we use beta(binomial) distributions to explain the data that is colle
 We are employing a random-intercept model on each level, with the first level being modeled as random due to the beta-binomial distribution accounting for over-dispersion by essentially allowing random probabilities for each trial.  
 
 Figure 1 depicts the hierarchical model. 
-![Hierarchical Model](model_five_levels.png){wIDth=500, height=500}
+![Hierarchical Model](model_five_levels.png){width=500, height=500}
 
 
 
@@ -33,7 +33,7 @@ This sets the starting equation as:
 $$
 Y_{i} \sim BetaBin(N,\mu,\theta)
 $$
-Beta-binomial distribution can be explained as a binomial distribution that has its probability parameter informed by the beta distribution of probabilities. Here $Y_{i}$  is the number or rate of correct responses for each indivIDual i = 1, ..., n, $BetaBin$ indicates the observations are drawn from a beta-binomial distribution which has the $N$ parameter for the number of trials, $\mu$ for the average probability (Some authors denote it as pbar; McElreath, 2020) of the beta distribution and $\theta$ as the dispersion (precision) parameter of the beta distribution (some authors might note it as $\phi$; Burkner, 2017).
+Beta-binomial distribution can be explained as a binomial distribution that has its probability parameter informed by the beta distribution of probabilities. Here $Y_{i}$  is the number or rate of correct responses for each individual i = 1, ..., n, $BetaBin$ indicates the observations are drawn from a beta-binomial distribution which has the $N$ parameter for the number of trials, $\mu$ for the average probability (Some authors denote it as pbar; McElreath, 2020) of the beta distribution and $\theta$ as the dispersion (precision) parameter of the beta distribution (some authors might note it as $\phi$; Burkner, 2017).
 In case we had a dataset that contains observations of correct responses that is not nested within participants, classes, studies, schools, etc., this equation would be our model. One thing we would have to specify for the Bayesian model would be the priors for the distribution parameters.
 
 $$
@@ -79,7 +79,7 @@ $$
 $$
 
 $$
-\mu_{pop} \sim Student(3, 0, 1)
+\mu_{pop} \sim Student(7, 3.5, 3)
 $$
 
 $$
@@ -112,56 +112,53 @@ library(tidyverse)
 library(brms)
 library(tidybayes)
 library(bayesplot)
-library(rstanarm)
+library(ggdist)
+#library(rstanarm)
 set.seed(2024)
+# get code from: https://michael-franke.github.io/Bayesian-Regression/practice-sheets/11a-cheat-sheet.html
 ```
 
-```{r data}
-#data <- read_csv("reliability_df.csv") %>% filter(filename == "Emil.csv",
-#                                                  study != "Calik_2010") %>% 
-#  mutate(success_counts = round(y, digits = 0)) %>% mutate(success_rate = (success_counts / 10)*100) %>% 
-#  mutate(fail_rate = (100 - success_rate)) %>% 
-#  mutate(ID = as.factor(ID),
-#         case = as.factor(case),
-#         study = as.factor(study))
-#
-## separate the plot by filtering only the intervention points
-## calculate mean from the baseline points
-#
-#data %>% filter(ID == "intervention") %>% ggplot(aes(x = x, y = success_rate, color = case)) +
-#  geom_point() +
-#  geom_line() +
-#  facet_wrap(~study, ncol = 3)
-
+```{r}
+#| label: data
+# data will be cleaned here for analyses. We will filter out maintenance and generalization phases for the analysis. We will also filter data based on SCED design and run all models for each category of designs. 
 data <- read_csv("mydata.csv") %>% 
   mutate(success_rate = round(success_rate*100, digits = 0),
          fail_rate = round(abs(fail_rate)*100, digits = 0)) %>% 
   filter(ID != "Maintenance")
 
+#data %>% filter(ID == "intervention") %>% ggplot(aes(x = x, y = success_rate, color = case)) +
+#  geom_point() +
+#  geom_line() +
+#  facet_wrap(~study, ncol = len())
 
 ```
 
-```{r baes-model}
+```{r}
+#| label: baes-model
 #| output: FALSE
 # "0 + variable" removes the intercept, i.e., shows a separate coefficient for the "ref" group (baseline) and the comparison, vs. having the average intercept and then the difference between groups - it also removes centering parametrization and I want to avoid that so keep in the intercept
-# note, this data does not discern multiple measurements for the same participant - needs to be added
-prior <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
+
+# get_prior extracts all priors defined for the used model. model one will be run with default priors set by the package
+prior <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case), 
                    data = data, family = beta_binomial())
 
-model_one <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
-                 data = data, family = beta_binomial(link = "logit"),
-                 prior = prior, warmup = 2000, iter = 4000,
-                 control = list(adapt_delta = 0.9) # trying to fix divergent transitions, there are a few only
+# hierarchical model that has success rate as the outcome predicted for each phase (ID) when nested among participants (case) and study (case)
+model_one <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case), 
+                 data = data, 
+                 family = beta_binomial(link = "logit"), # link function for 0 to 1 probabilities
+                 prior = prior, # uses the default priors
+                 warmup = 2000, iter = 4000,
+                 control = list(adapt_delta = 0.99) # fix divergent transitions
           )
 
 
 ```
 
-```{r baes-plots}
+```{r}
+#| label: baes-plots
 #get_variables(model_one)
-#model_one %<>% recover_types(data)
 summary(model_one)
-
+color_scheme_set("red")
 #posterior predictive check for baseline and intervention fit
 pp_check(model_one, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
 
@@ -169,165 +166,229 @@ pp_check(model_one, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
 #                 prior = prior)
 #general plots
 plot(model_one)
-#
+# plot the posterior distribution per case nested within their studies
 model_one %>%
-  spread_draws(r_case[case,IDIntervention], b_IDIntervention) %>%
-  mutate(case_mean = exp(b_IDIntervention) + exp(r_case)) %>%
-  ggplot(aes(y = case, x = case_mean)) +
-  stat_halfeye(color = "#ff0040", fill = "#ffcedb") +
+  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>% #extract posterior samples for the population effect and cases nested within study; presents them in a tidy format
+  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study:case`)) %>% #exponentiated to plot odds ratio
+  ggplot(aes(y = `study:case`, x = case_mean)) +
+  ggdist::stat_halfeye(color = "#dddbf1", fill = "#8c2f39") +
   theme_minimal() +
-  coord_cartesian(xlim = c(-80,80))
+  coord_cartesian(xlim = c(-10,80)) # set limits to x-axis to make the distributions clearer - might need to be adjusted later
 
 
 
 ```
 
-```{r baes-model-two}
+# Main model
+This model is built with more informed priors and will be used in the primary analysis
+```{r}
+#| label: baes-model-two
 #| output: FALSE
-prior_two <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
+
+# we will approximate the spread for the cauchy distribution used for the fixed effects 
+# by reverting the effect size for SCED reported in the meta-analysis by Sermier Dessemontet
+# (2019). The calculation is based on the equation provided by Jane (2024) to convert Choen's d to
+# odds ratio. This is an imprecise way to calculate but will serve as an approximate value to 
+# inform our prior. OR = exp(pi*d/sqrt(3)). We will not exponentiate the odds ratio and keep the # log odds, and will use Hedge's g provided in the meta-analysis instead of Cohen's d.
+# logor <- (3.14*1.94)/sqrt(3) # 3.52
+
+
+prior_two <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case),
                    data = data, family = beta_binomial())
 
-prior_two$prior[2] <- "cauchy(0, 1)" #baseline values?
+prior_two$prior[2] <- "student_t(7, 3.5, 3)" #fixed effects
 prior_two$prior[3] <- "lkj(2)" # to keep higher correlations less likely
-prior_two$prior[6] <- "cauchy(0, 2.5)" # general consensus seems to be in favor of student t for all, both intercept and sd
+prior_two$prior[6] <- "cauchy(0, 1)" 
 prior_two$prior[7] <- "gamma(3,3)" # phi prior, recommended against the gamma for binomial families but seems to work better than student/normal/cauchy
 prior_two$prior[8] <- "student_t(7, 0, 3)" # apparently we should avoid cauchy for sd as it leads to implausibly large values https://statmodeling.stat.columbia.edu/2018/04/03/justify-my-love/
 
-model_two <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study), 
+model_two <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case), 
                  data = data, family = beta_binomial(link = "logit"),
                  prior = prior_two, warmup = 2000, iter = 4000,
-                 control = list(adapt_delta = 0.9) # trying to fix divergent transitions, there are a few only
+                 control = list(adapt_delta = 0.95) # fix divergent transitions
           )
 
 ```
 
-```{r baes-plots-two}
 
+```{r}
+#| label: baes-plots-two
 summary(model_two)
-
+color_scheme_set("red")
 #posterior predictive check for baseline and intervention fit
 pp_check(model_two, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
 #get_variables(model_one)
-#model_one %<>% recover_types(data)
-color_scheme_set("orange")
 posterior_two <- as.matrix(model_two)
 
 plot_title <- ggtitle("Posterior distributions",
                       "with medians and 90% intervals")
 mcmc_areas(posterior_two,
-           pars = c("b_Intercept", "b_IDIntervention", "sd_case__IDIntervention", "sd_case:study__IDIntervention", "phi"),
+           pars = c("b_Intercept", "b_IDIntervention", "sd_study:case__IDIntervention", "phi"),
            prob = 0.9) + plot_title
 #general plots
 plot(model_two)
 #
 model_two %>%
-  spread_draws(r_case[case,IDIntervention], b_IDIntervention) %>%
-  mutate(case_mean = exp(b_IDIntervention) + exp(r_case)) %>%
-  ggplot(aes(y = case, x = case_mean)) +
-  stat_halfeye(color = "magenta", fill = "pink") +
+  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>%
+  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study:case`)) %>% 
+  ggplot(aes(y = `study:case`, x = case_mean)) +
+  ggdist::stat_halfeye(color = "#8c2f39", fill = "#dddbf1") +
   theme_minimal() +
-  coord_cartesian(xlim = c(-80,80))
+  coord_cartesian(xlim = c(-10,80))
 
 ```
 
-```{r comparison-model}
 
-# WAIC treats observations as independent, so I'm not sure this is correct or how to even interpret the value 
+```{r}
+#| label: comparison-model
 model_one_ic <- add_criterion(model_one, criterion = "loo")
 model_one_waic <- waic(model_one)
 model_two_ic <- add_criterion(model_two, criterion = "loo")
 model_two_waic <- waic(model_two)
 
 w <- loo_compare(model_one_waic, model_two_waic) 
-print(w, simplify = F) # seems like the default priors produce a better model but mine looks prettier :(
+print(w, simplify = F)
 
 l <- loo_compare(model_one_ic, model_two_ic) # leave-one-out cross validation
 print(l, simplify = F)
+
+# moderator analyses
+#model_gender_ic <- add_criterion(model_gender, criterion = "loo")
+#model_gender_waic <- waic(model_gender)
+#model_iq_ic <- add_criterion(model_iq, criterion = "loo")
+#model_iq_waic <- waic(model_iq)
 ```
 
 
 ### Moderators
 #### Gender
-```{r baes-model-gender}
-#prior_gender <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + gender), 
-#                   data = data, family = beta_binomial())
-#
-#model_gender <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + gender), 
-#                 data = data, family = beta_binomial(link = "logit"),
-#                 prior = prior_gender, warmup = 1000, iter = 4000
-#          )
-#
-#summary(model_gender)
-#
-##posterior predictive check for baseline and intervention fit
-#pp_check(model_gender, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+```{r}
+#| label: baes-model-gender
+prior_gender <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + gender, 
+                   data = data, family = beta_binomial())
+
+# the model is incorporating gender as a moderator, set as fixed effect, and uses default priors
+model_gender <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + gender, 
+                 data = data, family = beta_binomial(link = "logit"),
+                 prior = prior_gender, warmup = 1000, iter = 4000
+          )
+
+summary(model_gender)
+
+#posterior predictive check for baseline and intervention fit
+pp_check(model_gender, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
 ```
 
-```{r baes-plots-gender}
-#| echo: FALSE
-#| message: FALSE
-#| warning: FALSE
-#| error: FALSE
-#get_variables(model_one)
-#model_one %<>% recover_types(data)
+```{r}
+#| label: baes-plots-gender
 
 #general plots
-#plot(model_gender)
+plot(model_gender)
 ##
-#model_gender %>%
-#  spread_draws(r_case[case,IDIntervention], b_IDIntervention) %>%
-#  mutate(case_mean = b_IDIntervention + r_case) %>%
-#  ggplot(aes(y = case, x = case_mean)) +
-#  stat_halfeye(color = "magenta", fill = "pink") +
-#  theme_minimal() 
+model_gender %>%
+  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>%
+  mutate(case_mean = b_IDIntervention + `r_study:case`) %>% #not exponentiated
+  ggplot(aes(y = `study:case`, x = case_mean)) +
+  ggdist::stat_halfeye(color = "#dddbf1", fill = "#8c2f39") +
+  theme_minimal() 
 
 ```
 
 
 #### IQ
-```{r baes-model-iq}
-#prior_iq <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + IQ), 
-#                   data = data, family = beta_binomial())
-#
-#
-#model_iq <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + IQ), 
-#                 data = data, family = beta_binomial(link = "logit"),
-#                 prior = prior_iq, warmup = 1000, iter = 4000
-#          )
-#
-#summary(model_iq)
-#
-##posterior predictive check for baseline and intervention fit
-#pp_check(model_iq, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
-#
-#plot(model_iq)
-```
-
-#### SCD type 
-Moderating effect of the type of single-case design (this variable is missing in the dataset) - I would rather have separate meta-analyses on each design type in case this makes a difference. Some designs are conceptually different (e.g. multiple baseline vs multiple probes) and I don't know if it makes sense to interpret results that come from combining them. 
 ```{r}
-#prior_iq <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + study_design), 
-#                   data = data, family = beta_binomial())
-#
-#
-#model_iq <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|case/study) + (1 + study_design), 
-#                 data = data, family = beta_binomial(link = "logit"),
-#                 prior = prior_iq, warmup = 1000, iter = 4000
-#          )
-#
-#summary(model_iq)
-#
-##posterior predictive check for baseline and intervention fit
-#pp_check(model_iq, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
-#
-#plot(model_iq)
+#| label: baes-model-iq
+prior_iq <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + IQ, 
+                   data = data, family = beta_binomial())
+
+# the model is incorporating IQ as a moderator, set as fixed effect, and uses default priors
+model_iq <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + IQ, 
+                 data = data, family = beta_binomial(link = "logit"),
+                 prior = prior_iq, warmup = 1000, iter = 4000
+          )
+
+summary(model_iq)
+
+#posterior predictive check for baseline and intervention fit
+pp_check(model_iq, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+
+plot(model_iq)
+```
+
+```{r}
+#| label: baes-plots-iq
+
+#general plots
+plot(model_iq)
+get_variables(model_iq)
+##
+model_iq %>%
+  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>%
+  mutate(case_mean = b_IDIntervention + `r_study:case`) %>% #not exponentiated
+  ggplot(aes(y = `study:case`, x = case_mean)) +
+  ggdist::stat_halfeye(color = "#8c2f39", fill = "#dddbf1") +
+  theme_minimal() 
+
+```
+
+#### age
+```{r}
+#| label: baes-model-age
+
+prior_age <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + age, 
+                   data = data, family = beta_binomial())
+
+# the model is incorporating age as a moderator, set as fixed effect, and uses default priors
+model_age <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + age, #
+                 data = data, family = beta_binomial(link = "logit"),
+                 prior = prior_age, warmup = 1000, iter = 4000
+          )
+
+summary(model_age)
+
+#posterior predictive check for baseline and intervention fit
+pp_check(model_age, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+
+plot(model_age)
 ```
 
 
 
-#### Risk of Bias sensitivity analysis
-```{r loo-rob}
+### Risk of Bias sensitivity analysis
+```{r}
+#| label: lo-rob
 # do a sensitivity analysis based on risk of bias assessment
 # data_rob <- data %>% filter(rob != "high")
 ```
+
+
+### Exploratory analyses
+As exploratory analyses, we could model an overall meta-analysis with study design as the moderator, and model an interaction between phase and time (session). 
+```{r}
+#| label: EDA
+# interaction of session (x) and phase (ID)
+#prior_interaction <- get_prior(success_rate | trials(success_rate + fail_rate) ~ (1 | #study/case/ID/x), 
+#                   data = data, family = beta_binomial())
+#
+## this models the interaction between phase and session
+#model_interaction <- brm(success_rate | trials(success_rate + fail_rate) ~ (1 | #study/case/ID/x), #
+#                 data = data, family = beta_binomial(link = "logit"),
+#                 prior = prior_interaction, warmup = 1000, iter = 4000
+#          )
+
+# modelling all designs together with the design as moderator
+#prior_design <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + #(ID|study/case) + design, 
+#                   data = data, family = beta_binomial())
+#
+## the model is incorporating age as a moderator, set as fixed effect, and uses default #priors
+#model_age <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + #design, #
+#                 data = data, family = beta_binomial(link = "logit"),
+#                 prior = prior_design, warmup = 1000, iter = 4000
+#          )
+```
+
+## References
+Jané, M., Xiao, Q., Yeung, S., \*Ben-Shachar, M. S., \*Caldwell, A., \*Cousineau, D., \*Dunleavy, D. J., \*Elsherif, M., \*Johnson, B., \*Moreau, D., \*Riesthuis, P., \*Röseler, L., \*Steele, J., \*Vieira, F., *Zloteanu, M., & ^Feldman, G. (2024). Guide to Effect Sizes and Confidence Intervals. http://dx.doi.org/10.17605/OSF.IO/D8C4G
+Pustejovsky, J. E., & Ferron, J. M. (2017). Research synthesis and meta-analysis of single-case designs. In J. M. Kaufmann, D. P. Hallahan, & P. C. Pullen (Eds.), Handbook of Special Education, 2nd Edition. New York, NY: Routledge.
+Shadish, W. R., & Sullivan, K. J. (2011). Characteristics of single-case designs used to assess intervention effects in 2008. Behavior Research Methods, 43(4), 971–980. https://doi.org/10.3758/s13428-011-0111-y
 
