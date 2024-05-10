@@ -21,11 +21,6 @@ There are multiple crucial assumptions to make when modeling time-series (i.e., 
 Generally, we use beta(binomial) distributions to explain the data that is collected in trials and regarded as the number or rate of success(es) in a trial. Often, this can be seen in medical research on survival rates, or educational testing data. However, those trials are most often independent. In our case, the trials are sessions in a repeated-measure design, which makes the nested within participants. Without having to scale it further, this requires a hierarchical modelling to account for interdependence of these observations. A single case design then requires modelling between participant average to reach an effect size. That is our third level - study level, where the participants are nested within a study. Finally, as we want to meta-analyze findings from various studies, we calculate the population average effect based on the information from multiple studies. This leads us to the final, fourth level of this model that accounts for between study variation.
 We are employing a random-intercept model on each level, with the first level being modeled as random due to the beta-binomial distribution accounting for over-dispersion by essentially allowing random probabilities for each trial.  
 
-Figure 1 depicts the hierarchical model. 
-![Hierarchical Model](model_five_levels.png){width=500, height=500}
-
-
-
 #### Outcome
 Level one of the multilevel model describes the relationship between the outcome - word or non-word reading, and the predictor - reading intervention. Informed by previous reviews with similar interest, we assume majority of the studies will employ non-standardized word-reading tests, with counts and percentages as measures, and fixed word lists. If we considered the trials to be independent, binomial or Poisson distribution would potentially be the most appropriate model for the outcome. However, as we assume the existence of autocorrelation (but will not model it explicitly) and knowledge transfer, we cannot assume the trials are independent. To allow for greater flexibility and account for over-dispersion (i.e., variance being larger than the mean), and to account for unavailable raw counts in instances where the studies present proportion of correct responses, we will model the outcome under the beta-binomial distribution (Gelman et al., 2020).
 
@@ -155,28 +150,96 @@ model_one <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/
 ```
 
 ```{r}
+# density plots per study, code taken from Solomon Kurz https://bookdown.org/content/3686/dichotomous-predicted-variable.html#robust-logistic-regression # 21.4.2.1 Example: Baseball again.
+#nd <- 
+#  data %>% 
+#  group_by(study) %>% 
+#  summarise(success = mean(success_rate) %>% round(0)) %>% 
+#  # to help join with the draws
+#  mutate(name = str_c("V", 1:n()))
+#
+## push the model through `fitted()` and wrangle
+#fitted(model_one,
+#       newdata = data,
+#       re_formula = success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case),
+#       scale = "linear",
+#       summary = F) %>% 
+#  as_tibble() %>% 
+#  pivot_longer(everything()) %>% 
+#  mutate(probability = inv_logit_scaled(value)) %>% 
+#  left_join(nd, by = "name") %>% 
+#  
+#  # plot
+#  ggplot(aes(x = probability, y = study)) +
+#  geom_vline(xintercept = fixef(model_one)[1] %>% inv_logit_scaled(), color = "orange") +
+#  ggridges::geom_density_ridges(color = "red", fill = "pink", size = 1/2,
+#                      rel_min_height = 0.005, scale = .9) +
+#  geom_jitter(data = data,
+#              aes(x = success_rate / (success_rate + fail_rate)),
+#              height = .025, alpha = 1/6, size = 1/6, color = "red") +
+#  scale_x_continuous("Correct Words / All attempts", breaks = 0:5 / 5, expand = c(0, 0)) +
+#  coord_cartesian(xlim = c(0, 1), 
+#                  ylim = c(1, 9.5)) +
+#  ggtitle("Data with Posterior Predictive Distrib.") +
+#  theme(axis.text.y = element_text(hjust = 0),
+#        axis.ticks.y = element_blank())
+```
+
+
+
+```{r}
 #| label: baes-plots
-#get_variables(model_one)
+#get_variables(model_one) #extracts all posterior draw variables
 summary(model_one)
 color_scheme_set("red")
 #posterior predictive check for baseline and intervention fit
 pp_check(model_one, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
 
 #stancode(model_one, data = data, family = beta_binomial(link = "logit"),
-#                 prior = prior)
+#                 prior = prior) #shows stan code for the model
 #general plots
 plot(model_one)
-# plot the posterior distribution per case nested within their studies
+# plot the posterior distributions per case nested within their studies
 model_one %>%
   tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>% #extract posterior samples for the population effect and cases nested within study; presents them in a tidy format
-  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study:case`)) %>% #exponentiated to plot odds ratio
+  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study:case`)) %>% #inverse logit to probabilities
+  # mutate(case_mean = inv_logit_scaled(b_IDIntervention + `r_study:case`)) %>% #if we want to plot probabilities instead of OR
   ggplot(aes(y = `study:case`, x = case_mean)) +
   ggdist::stat_halfeye(color = "#dddbf1", fill = "#8c2f39") +
+  geom_vline(xintercept = exp(fixef(model_one)[2]), color = "gray") +
   theme_minimal() +
-  coord_cartesian(xlim = c(-10,80)) # set limits to x-axis to make the distributions clearer - might need to be adjusted later
+  coord_cartesian(xlim = c(0, 80)) # set limits to be between 0 and 1 probability
 
+# plot the posterior distributions of studies
+model_one %>%
+  tidybayes::spread_draws(b_IDIntervention, r_study[study,IDIntervention]) %>% #extract posterior samples for the population effect and cases nested within study; presents them in a tidy format
+  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study`)) %>% #inverse to probabilities
+  # mutate(case_mean = inv_logit_scaled(b_IDIntervention + `r_study`)) %>% #if we want to plot probabilities instead of OR
+  ggplot(aes(y = study, x = case_mean)) +
+  ggdist::stat_halfeye(color = "#dddbf1", fill = "#8c2f39") +
+  theme_minimal() + 
+  coord_cartesian(xlim = c(0,80)) # set limits to be between 0 and 1 probability
 
+```
+```{r}
+#| label: baes-model-one-forest
+pop_effect <- as.data.frame(fixef(model_one)) %>% 
+  rownames_to_column() %>% 
+  pivot_wider(names_from = rowname, values_from = c(Estimate, Est.Error, Q2.5, Q97.5), names_sep = ".") %>% 
+  mutate(rowname = "Population Effect")
+random_effects_one <- ranef(model_one)
+random_effects_one <- as.data.frame(random_effects_one[["study"]]) %>% 
+  rownames_to_column()
 
+forest_model_one <- bind_rows(pop_effect, random_effects_one) 
+
+ggplot(forest_model_one, aes(x = Estimate.IDIntervention, y = rowname)) +
+  geom_errorbar(aes(xmin = Estimate.IDIntervention - 2*Est.Error.IDIntervention, xmax = Estimate.IDIntervention + 2*Est.Error.IDIntervention, width = 0)) +
+  geom_point(color = 'lavender') + 
+  labs(x = 'Estimated Effect of Reading Intervention on Decoding in log-odds (+/- 2sd)', y = "Study") +
+  geom_vline(xintercept = 0, color = '#8c2f39') +
+  xlim(-8, 8)
+  
 ```
 
 # Main model
@@ -198,7 +261,7 @@ prior_two <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|
 
 prior_two$prior[2] <- "student_t(7, 3.5, 3)" #fixed effects
 prior_two$prior[3] <- "lkj(2)" # to keep higher correlations less likely
-prior_two$prior[6] <- "cauchy(0, 1)" 
+prior_two$prior[6] <- "cauchy(0,1)" 
 prior_two$prior[7] <- "gamma(3,3)" # phi prior, recommended against the gamma for binomial families but seems to work better than student/normal/cauchy
 prior_two$prior[8] <- "student_t(7, 0, 3)" # apparently we should avoid cauchy for sd as it leads to implausibly large values https://statmodeling.stat.columbia.edu/2018/04/03/justify-my-love/
 
@@ -231,6 +294,7 @@ plot(model_two)
 model_two %>%
   tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>%
   mutate(case_mean = exp(b_IDIntervention) + exp(`r_study:case`)) %>% 
+  #mutate(case_mean = inv_logit_scaled(b_IDIntervention + `r_study:case`)) %>% 
   ggplot(aes(y = `study:case`, x = case_mean)) +
   ggdist::stat_halfeye(color = "#8c2f39", fill = "#dddbf1") +
   theme_minimal() +
