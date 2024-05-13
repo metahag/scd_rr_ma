@@ -315,40 +315,7 @@ print(l, simplify = F)
 ```
 
 
-### Moderators
-#### Gender
-```{r}
-#| label: baes-model-gender
-prior_gender <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + gender, 
-                   data = data, family = beta_binomial())
-
-# the model is incorporating gender as a moderator, set as fixed effect, and uses default priors
-model_gender <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + gender, 
-                 data = data, family = beta_binomial(link = "logit"),
-                 prior = prior_gender, warmup = 1000, iter = 4000
-          )
-
-summary(model_gender)
-
-#posterior predictive check for baseline and intervention fit
-pp_check(model_gender, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
-```
-
-```{r}
-#| label: baes-plots-gender
-
-#general plots
-plot(model_gender)
-##
-model_gender %>%
-  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>%
-  mutate(case_mean = b_IDIntervention + `r_study:case`) %>% #not exponentiated
-  ggplot(aes(y = `study:case`, x = case_mean)) +
-  ggdist::stat_halfeye(color = "#dddbf1", fill = "#8c2f39") +
-  theme_minimal() 
-
-```
-
+### Moderator analysis
 
 #### IQ
 ```{r}
@@ -386,29 +353,6 @@ model_iq %>%
 
 ```
 
-#### age
-```{r}
-#| label: baes-model-age
-
-prior_age <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + age, 
-                   data = data, family = beta_binomial())
-
-# the model is incorporating age as a moderator, set as fixed effect, and uses default priors
-model_age <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + age, #
-                 data = data, family = beta_binomial(link = "logit"),
-                 prior = prior_age, warmup = 1000, iter = 4000
-          )
-
-summary(model_age)
-
-#posterior predictive check for baseline and intervention fit
-pp_check(model_age, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
-
-plot(model_age)
-```
-
-
-
 ### Risk of Bias sensitivity analysis
 ```{r}
 #| label: lo-rob
@@ -418,7 +362,7 @@ plot(model_age)
 
 
 ### Exploratory analyses
-As exploratory analyses, we could model an overall meta-analysis with study design as the moderator, and model an interaction between phase and time (session). 
+# not in the manuscript
 ```{r}
 #| label: EDA
 # interaction of session (x) and phase (ID)
