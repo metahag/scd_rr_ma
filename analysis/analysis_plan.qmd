@@ -74,7 +74,7 @@ $$
 $$
 
 $$
-\mu_{pop} \sim Student(7, 3.5, 3)
+\mu_{pop} \sim Student(7, 0, 1)
 $$
 
 $$
@@ -247,19 +247,10 @@ This model is built with more informed priors and will be used in the primary an
 ```{r}
 #| label: baes-model-two
 #| output: FALSE
-
-# we will approximate the spread for the cauchy distribution used for the fixed effects 
-# by reverting the effect size for SCED reported in the meta-analysis by Sermier Dessemontet
-# (2019). The calculation is based on the equation provided by Jane (2024) to convert Choen's d to
-# odds ratio. This is an imprecise way to calculate but will serve as an approximate value to 
-# inform our prior. OR = exp(pi*d/sqrt(3)). We will not exponentiate the odds ratio and keep the # log odds, and will use Hedge's g provided in the meta-analysis instead of Cohen's d.
-# logor <- (3.14*1.94)/sqrt(3) # 3.52
-
-
 prior_two <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case),
                    data = data, family = beta_binomial())
 
-prior_two$prior[2] <- "student_t(7, 3.5, 3)" #fixed effects
+prior_two$prior[2] <- "student_t(7,0,1)" #fixed effects
 prior_two$prior[3] <- "lkj(2)" # to keep higher correlations less likely
 prior_two$prior[6] <- "cauchy(0,1)" 
 prior_two$prior[7] <- "gamma(3,3)" # phi prior, recommended against the gamma for binomial families but seems to work better than student/normal/cauchy
