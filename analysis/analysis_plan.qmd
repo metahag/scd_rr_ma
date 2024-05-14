@@ -74,7 +74,7 @@ $$
 $$
 
 $$
-\mu_{pop} \sim Student(7, 0, 1)
+\mu_{pop} \sim Student(7, 0, 3)
 $$
 
 $$
@@ -89,7 +89,7 @@ $$
 \theta = \Phi
 $$
 $$
-\Phi \sim gamma(3,3)
+\Phi \sim gamma(1,1)
 $$
 
 The multilevel model now specifies random effects on the participant ($g_{participant[i]}$) and study level ($g_{study[i]}$). We also define parameters for priors for the means and standard deviations. As these effects are interdependent, the model also produces a correlation matrix to explain the covariance. 
@@ -390,4 +390,6 @@ model_iq %>%
 Jané, M., Xiao, Q., Yeung, S., \*Ben-Shachar, M. S., \*Caldwell, A., \*Cousineau, D., \*Dunleavy, D. J., \*Elsherif, M., \*Johnson, B., \*Moreau, D., \*Riesthuis, P., \*Röseler, L., \*Steele, J., \*Vieira, F., *Zloteanu, M., & ^Feldman, G. (2024). Guide to Effect Sizes and Confidence Intervals. http://dx.doi.org/10.17605/OSF.IO/D8C4G
 Pustejovsky, J. E., & Ferron, J. M. (2017). Research synthesis and meta-analysis of single-case designs. In J. M. Kaufmann, D. P. Hallahan, & P. C. Pullen (Eds.), Handbook of Special Education, 2nd Edition. New York, NY: Routledge.
 Shadish, W. R., & Sullivan, K. J. (2011). Characteristics of single-case designs used to assess intervention effects in 2008. Behavior Research Methods, 43(4), 971–980. https://doi.org/10.3758/s13428-011-0111-y
+Brehm, Z., Wagner, A., VonKaenel, E., Burton, D., Weisenthal, S. J., Cole, M., Pang, Y., & Thurston, S. W. (2021). Selection of inverse gamma and half-t priors for hierarchical models: Sensitivity and recommendations (arXiv:2108.12045). arXiv. http://arxiv.org/abs/2108.12045
+Gelman, A. (2006). Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper). Bayesian Analysis, 1(3), 515–534. https://doi.org/10.1214/06-BA117A
 
