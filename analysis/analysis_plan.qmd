@@ -250,16 +250,16 @@ This model is built with more informed priors and will be used in the primary an
 prior_two <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case),
                    data = data, family = beta_binomial())
 
-prior_two$prior[2] <- "student_t(7,0,1)" #fixed effects
+prior_two$prior[2] <- "student_t(7,0,3)" #fixed effects / slope; Brehm et al (2021)
 prior_two$prior[3] <- "lkj(2)" # to keep higher correlations less likely
-prior_two$prior[6] <- "cauchy(0,1)" 
-prior_two$prior[7] <- "gamma(3,3)" # phi prior, recommended against the gamma for binomial families but seems to work better than student/normal/cauchy
-prior_two$prior[8] <- "student_t(7, 0, 3)" # apparently we should avoid cauchy for sd as it leads to implausibly large values https://statmodeling.stat.columbia.edu/2018/04/03/justify-my-love/
+prior_two$prior[6] <- "cauchy(0,1)" # intercept
+prior_two$prior[7] <- "gamma(1,1)" # phi prior
+prior_two$prior[8] <- "student_t(7, 0, 3)" # more flexible and have better behavior near 0 (gelman, 2006), apparently we should avoid cauchy for sd as it leads to implausibly large values https://statmodeling.stat.columbia.edu/2018/04/03/justify-my-love/
 
 model_two <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case), 
                  data = data, family = beta_binomial(link = "logit"),
                  prior = prior_two, warmup = 2000, iter = 4000,
-                 control = list(adapt_delta = 0.95) # fix divergent transitions
+                 control = list(adapt_delta = 0.99) # fix divergent transitions
           )
 
 ```
