@@ -1,6 +1,7 @@
 # ---- Code for extracting data--------------
 # To be used on images with single case intervention data
 # 26/04/2024 by Marta Topor
+# revised 26/04/2025 by Lucija Batinović
 
 
 
@@ -19,12 +20,13 @@ library(metagear)
 #------------START EXTRACTION HERE-------------------------------
 
 library(juicr)
+library(here)
 
-setwd("extraction/")
+here::i_am("extraction/extraction.R")
 
 GUI_juicr(
   groupNames = c("Baseline", "Intervention", "Maintenance"),
-)
+) #these can be edited in JuicR to add additional names
 
 
 
@@ -41,7 +43,7 @@ result_files <- list.files(pattern ="csv")
 html_files <- list.files(pattern = "html")
 
 mydata <- data.frame(matrix(ncol = 15, nrow = 0))
-colnames(mydata) <- c("ID", "x", "y", "x_min", "x_max", "y_min", "y_max", "file_name", "case", "study", "success_count", "success_rate", "fail_rate", "measure", "measure_type")
+colnames(mydata) <- c("ID", "x", "y", "x_min", "x_max", "y_min", "y_max", "file_name", "case", "study", "success_count", "success_rate", "fail_rate", "measure", "measure_type", "iq", "intervention")
 
 
 #This will complite the data from all images into one dataframe ready for analyses
@@ -52,7 +54,7 @@ for (i in 1:length(result_files)){
     html_text()
   
   temp_data <- data.frame(matrix(ncol = 15, nrow = length(extracted_data$group)))
-  colnames(temp_data) <- c("ID", "x", "y", "x_min", "x_max", "y_min", "y_max", "file_name", "case", "study", "success_count", "success_rate", "fail_rate", "measure", "measure_type")
+  colnames(temp_data) <- c("ID", "x", "y", "x_min", "x_max", "y_min", "y_max", "file_name", "case", "study", "success_count", "success_rate", "fail_rate", "measure", "measure_type", "iq", "intervention")
   
   temp_data$ID <- extracted_data$group
   temp_data$ID[temp_data$ID == "auto"] <- "Baseline" # we decided to leave the baseline as automatic calculation 
@@ -67,20 +69,23 @@ for (i in 1:length(result_files)){
   
   #Extract further data from the html file
   html_row <- grep("age", html_data)
-  html_scraped <- gsub("\\D", "", stringr::str_split_1(html_data[html_row], "\r\n"))
-  html_scraped <- as.numeric(html_scraped)
+  html_scraped <- html_data[html_row]
   
-  x_min <- html_scraped[1]
-  x_max <- html_scraped[2]
-  y_min <- html_scraped[3]
-  y_max <- html_scraped[4]
-  measure_type <- gsub("measure name = ", "", measure_type[5])
+  x_min <- as.numeric(str_extract(html_scraped, "(?<=x min = )\\d+"))
+  x_max <- as.numeric(str_extract(html_scraped, "(?<=x max = )\\d+"))
+  y_min <- as.numeric(str_extract(html_scraped, "(?<=y min = )\\d+"))
+  y_max <- as.numeric(str_extract(html_scraped, "(?<=y max = )\\d+"))
+  measure_type <- str_extract(html_scraped, "(?<=measure name = )\\w+")
+  iq <- as.numeric(str_extract(html_scraped, "(?<=y IQ = )\\d+"))
+  intervention <- str_extract(html_scraped, "(?<=intervention = )\\w+")
 
   temp_data$measure_type <- measure_type
   temp_data$x_min <- x_min
   temp_data$x_max <- x_max
   temp_data$y_min <- y_min
   temp_data$y_max <- y_max
+  temp_data$iq <- iq
+  temp_data$intervention <- intervention
   
   temp_data$success_rate <- temp_data$success_count/y_max
   temp_data$fail_rate <- 1 - temp_data$success_rate

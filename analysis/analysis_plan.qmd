@@ -1,125 +1,203 @@
 ---
 title: "Analysis plan"
 author: "Lucija Batinović"
-format: docx
+format:
+  html:
+    embed-resources: true
+    self-contained-math: true 
+theme: lux
 editor: source
 execute: 
-  echo: FALSE
+  echo: TRUE
   message: FALSE
   warning: FALSE
   error: FALSE
+  output: FALSE
+  eval: FALSE
+bibliography: analysis_refs.bib
+bibliographystyle: apa
 ---
 
+## Synthesis plan
 
-## Model specifications
+We will conduct an individual participant data meta-analysis, by modelling a Bayesian, beta-binomial hierarchical regression. Our effect size will be presented as odds ratio between baseline and intervention phase, which represents the trend and variability aspects of SCED analysis according to WWC guidelines. The analyses will be performed in R (R Core Team, 2023; R version 4.3.1), using the brms (@burknerBrmsPackageBayesian2017) package, an R wrapper for the probabilistic programming language Stan (Stan Development Team, 2024). \
+We will conduct separate analyses for each category of reading interventions, as we do not consider them conceptually homogeneous enough to aggregate in one model. Likewise, we will group the analyses based on designs that can be synthesized in the same model. \
+In the first group, we will aggregate multiple baseline (and its variants), multiple probe designs. We consider these designs similar in logic, and as long as the intervention and outcome are kept homogeneous, we can model the variations in measurement and intervention setup across stages as random variation. \
+In the second group, we will synthesise changing-criterion designs. We will model CC designs according to the same formula as multiple baseline/AB designs, but separately from those designs. This aligns with the suggested analytical approach by  @shadishAnalyzingDataSingleCase2013, which suggested an analytical approach where one regards all criterion phases as the intervention phase and compares to the baseline (ignoring the stabilizing phases between criterions). Although modelling the CC design this way would functionally make it comparable to multiple baseline/AB design setup, the staggered nature of CC designs might artificially flatten the slope compared to AB or multiple baseline designs, where the mastery of the final desired outcome may come immediately, or at least early in the intervention phase. \
 
-As the reporting conventions of single-case designs allow for raw data extraction, we will take advantage of this opportunity and conduct an individual-participant multilevel meta-analysis. Having access to raw data allows for greater flexibility in modeling variations between and within participants, which is of even greater importance in single-case designs, considering the low sample size and often very few data points. For that reason, we will model a Bayesian meta-analysis. 
-There are multiple crucial assumptions to make when modeling time-series (i.e., repeated measures) designs: distribution of the outcome measure, time trends, autoregression, etc. There is little consensus on how to best approach dealing with outcome measures in single-case designs. Most commonly used effect size measures in SCD research belong to non-parametric effect size measures, e.g., PND (percentage of non-overlap data), LRR (logistic response ratio) and more recently developed parametric alternatives, e.g., WS-SMD and BS-SMD (standardized mean differences; developed to be comparable to group-design studies). These parametric effect size measures, although robust when assumptions cannot be certainly defined, generally assume non-existing time trends and autoregression, with a normal distribution of outcome measures (Pustejovsky, 2017). Shadish et al. (2011) found that autocorrelation size is inconclusive, albeit non-negligible, particularly in multiple-baseline designs. Furthermore, assuming normal distribution of the outcome measures is a risky feat in a research area that heavily utilizes counts and percentages as measures, which would be more appropriately explained under the Poisson or otherwise binomial families of distributions. We will further break down each parameter that will go into the model, justifying the final decisions for each one.
+The third group will consist of multiple-treatment designs, including multi-element designs, alternating-treatment designs, adapted alternating-treatment designs, and simultaneous-treatment designs. For studies using an Alternating Treatment Design (ATD), we will follow a structured extraction workflow: First, we will verify that a baseline phase is present, either as a pre-intervention phase or a comparison phase without treatment. If no baseline is available, the study will be excluded from extraction. If a baseline is present, we will assess the treatment phases. If both treatments do not belong to the same intervention category, the study will not be included in the analysis. Studies without a baseline/no treatment condition or comparing different intervention categories would not answer our research question which does not focus on the relative effectiveness of interventions. The baseline data will be explicitly modeled as "Baseline," and the superior treatment data will be modeled as "Intervention," extracting all available points. In all cases, data extraction will be done sequentially to maintain the chronological order of sessions in the dataset. These analyses follow modelling alternatives suggested by @manolovMetaanalysisSinglecaseExperimental2023a and @moeyaertEstimatingInterventionEffects2015a, based on the decision trees driven by the research question.\
+
+If we happen to find alternating/reversal phase designs (i.e., AB designs), we will aggregate them in the fourth group, although due to the nature of the intervention (learning effects), we do not expect to include these designs. \
+
+We will not model interventions categorized as other as we expect that category to be overly heterogeneous. 
+
+With four groups based on design, and three interventions (phonological awareness, fluency, and phonics), we anticipate at most 12 main meta-analytic models, given that we find at least two eligible studies for each category. Table 2 illustrates possible combinations and designs we plan to synthesise together.
+
+**Table 2**  
+*Study design and intervention matrix*
+
+| Major Design Groups                  | Subdesigns                                                                 | Intervention Categories                |
+|---------------------------------------|----------------------------------------------------------------------------|----------------------------------------|
+| 1. AB and Multiple Baseline Designs   | AB Design<br>Multiple Baseline across participants<br>Multiple Baseline across settings/situations<br>Multiple Baseline across time<br>Multiple Probe Design | A) Phonological Awareness<br>B) Fluency<br>C) Phonics |
+| 2. Changing Criterion Designs         | Changing Criterion (CC) Design                                              | A) Phonological Awareness<br>B) Fluency<br>C) Phonics |
+| 3. Multiple-Treatment Designs         | Multi-element Design<br>Alternating-Treatment Design (ATD)<br>Adapted Alternating-Treatment Design<br>Simultaneous-Treatment Design | A) Phonological Awareness<br>B) Fluency<br>C) Phonics |
+| 4. Reversal (ABAB) Designs             | ABAB (Reversal/Withdrawal) Design                                           | A) Phonological Awareness<br>B) Fluency<br>C) Phonics |
+| Combination Designs / Other                           | NA                                               | Not applicable                         |
 
 
-### Clusters 
-Generally, we use beta(binomial) distributions to explain the data that is collected in trials and regarded as the number or rate of success(es) in a trial. Often, this can be seen in medical research on survival rates, or educational testing data. However, those trials are most often independent. In our case, the trials are sessions in a repeated-measure design, which makes the nested within participants. Without having to scale it further, this requires a hierarchical modelling to account for interdependence of these observations. A single case design then requires modelling between participant average to reach an effect size. That is our third level - study level, where the participants are nested within a study. Finally, as we want to meta-analyze findings from various studies, we calculate the population average effect based on the information from multiple studies. This leads us to the final, fourth level of this model that accounts for between study variation.
-We are employing a random-intercept model on each level, with the first level being modeled as random due to the beta-binomial distribution accounting for over-dispersion by essentially allowing random probabilities for each trial.  
 
-#### Outcome
-Level one of the multilevel model describes the relationship between the outcome - word or non-word reading, and the predictor - reading intervention. Informed by previous reviews with similar interest, we assume majority of the studies will employ non-standardized word-reading tests, with counts and percentages as measures, and fixed word lists. If we considered the trials to be independent, binomial or Poisson distribution would potentially be the most appropriate model for the outcome. However, as we assume the existence of autocorrelation (but will not model it explicitly) and knowledge transfer, we cannot assume the trials are independent. To allow for greater flexibility and account for over-dispersion (i.e., variance being larger than the mean), and to account for unavailable raw counts in instances where the studies present proportion of correct responses, we will model the outcome under the beta-binomial distribution (Gelman et al., 2020).
+We will model the baseline and intervention phase separately in our main meta-analysis model, with interaction with time (session). We will also not model autocorrelation. Although the literature suggests the existence of moderate autocorrelation, particularly in multiple-baseline designs (@shadishCharacteristicsSinglecaseDesigns2011), we could model it exploratory only due to unknown estimates. 
 
-This sets the starting equation as:
-$$
-Y_{i} \sim BetaBin(N,\mu,\theta)
-$$
-Beta-binomial distribution can be explained as a binomial distribution that has its probability parameter informed by the beta distribution of probabilities. Here $Y_{i}$  is the number or rate of correct responses for each individual i = 1, ..., n, $BetaBin$ indicates the observations are drawn from a beta-binomial distribution which has the $N$ parameter for the number of trials, $\mu$ for the average probability (Some authors denote it as pbar; McElreath, 2020) of the beta distribution and $\theta$ as the dispersion (precision) parameter of the beta distribution (some authors might note it as $\phi$; Burkner, 2017).
-In case we had a dataset that contains observations of correct responses that is not nested within participants, classes, studies, schools, etc., this equation would be our model. One thing we would have to specify for the Bayesian model would be the priors for the distribution parameters.
+To answer our research question, we will provide posterior distribution plots of the average intervention effect (fixed effect) and the interaction effect between session and intervention. Furthermore, we will plot the posterior distributions of the random-effects estimates (SD) to assess heterogeneity of intervention effects between studies, and between participants within studies. We will provide estimates with 90% credible intervals for each effect, allowing readers to understand both the average intervention impact and the variability of effects across different studies and participants. As estimates will be presented on a log-odds scale, we will supplement them with converted odds ratios for interpretability.
 
-$$
-Y_{i} \sim BetaBin(N,\mu,\theta) 
-$$
-$$
-logit(\mu) = \alpha_{treatment[i]}
-$$
-$$
-\alpha \sim Normal(0, 1.5)
-$$
-$$
-\theta \sim gamma(0.1,0.1)
-$$
-We take the first function and add a prior for the average probability parameter ($\mu$) which is a log odds probability of success ($\alpha_{treatment[i]}$), with the $treatment$ index implying whether it's baseline or intervention. We draw the $\alpha$ from a normal distribution with a $mean$ of 0 and $SD$ of 1.5. The choice of the distribution is relatively arbitrary, we can assume that the odds parameter can be drawn from a normal distribution, but parameters are up to us to define based on previous knowledge.
+Level one of the multilevel model describes the relationship between the outcome - word or non-word reading, and the predictor - reading intervention. Informed by previous reviews with similar interest, we assume majority of the studies will employ non-standardized word-reading tests, with counts and percentages as measures, and fixed word lists, as we assume the existence of autocorrelation (but will not model it explicitly) and knowledge transfer, we cannot assume the trials are independent. To allow for greater flexibility and account for over-dispersion (i.e., variance being larger than the mean), and to account for unavailable raw counts in instances where the studies present proportion of correct responses, we will model the outcome under the beta-binomial distribution (@gelmanBayesianDataAnalysis2020). Figure 1 illustrates the multiple levels in a meta-analysis.
 
-Now, we have the model that would explain how we get the observation. To calculate the effect for our meta-analysis, we need to account for clusters on the levels we specified in the beginning: participant and study. There are two ways to approach when we have raw data - calculate average effects per study and do a meta-analysis of those effects (which is the common way of conducting a meta-analysis when you don't have raw data) or build a model that directly calculates the population (average) effect from the raw data. We will do the latter, one stage approach.
+To calculate the effect for our meta-analysis, we need to account for clusters on the levels we specified in the beginning: participant and study. There are two ways to approach when we have raw data - calculate average effects per study and do a meta-analysis of those effects (which is the common way of conducting a meta-analysis when you don't have raw data) or build a model that directly calculates the population (average) effect from the raw data. We will do the latter, one stage approach.
 
-We start with the same equation in the first line:
+**Figure 1**
+![Levels of the hierarchical model in SCEDs](MA SCED model.png)
 
-$$
-Y_{i} \sim BetaBin(N,\mu,\theta)
-$$
-$$
-logit(\mu) = \alpha_{treatment[i]} + g_{participant[i]} + g_{study[i]}
-$$
-
-Here, $\alpha_{treatment[i]}$ is modeled as:
-$$
-\alpha_{treatment[i]} = \alpha_0 + \alpha_1 × Treatment_[i]
-$$
-where $\alpha_0$ is the baseline log odds of success when no treatment is applied, and $\alpha_1$ represents the change in log odds due to the treatment. The term $Treatment_[i]$ is a variable indicating baseline or intervention stage.
+Thus, our starting model is as follows:
 
 $$
-\alpha \sim Cauchy(\mu_{study},\sigma_{study})
+Y_{ijk} \sim BetaBin(N_{ijk}, \mu_{ijk}, \theta)
+$$ 
+
+Beta-binomial distribution can be explained as a binomial distribution that has its probability parameter informed by the beta distribution of probabilities. $Y_{ijk}$ represents the correct response rate for each individual (j) within a study (k) at a certain time point i = 1, ..., n. $BetaBin$ indicates the observations are drawn from a beta-binomial distribution which has the $N_{ijk}$ parameter for the number of trials, $\mu_{ijk}$ for the average probability (Some authors denote it as pbar; @mcelreathStatisticalRethinkingBayesian2020) of the beta distribution and $\theta$ as the dispersion (precision) parameter of the beta distribution (some authors might note it as $\phi$; @burknerBrmsPackageBayesian2017). 
+
+$$
+\text{logit}(\mu_{ijk}) = \alpha + \beta_1 ID_{j} + \beta_2 \text{session}_{i} + \beta_3 ID_j*\text{session}_{i} + g_{jk} + g_k
+$$
+
+Here, $\alpha$ is the global intercept, $\beta_1$ represents the main effect of ID (i.e., design phase), $\beta_2$ represents the main effect of session (i.e., measurement occasions), $\beta_3 ID_j*session_i$ represents the interaction of session and phase, $g_{jk}$ is the participant-level random effect nested within the study, $g_k$ is the study-level random effect. The ID stands for phase, and will be either baseline and intervention in case of AB, multiple baseline and changing criterion designs, or baseline, intervention 1 and intervention 2 for eligible alternating treatment designs.
+
+Next parameters we have to specify for the Bayesian model would be the priors for the distribution parameters.We take the first function and add a prior for the average probability parameter ($\mu$) which is a log odds probability of success ($\alpha_{treatment[i]}$), with the $treatment$ index implying whether it's baseline or intervention. We draw the $\alpha$ from a normal distribution with a $mean$ of 0 and $SD$ of 1.5. The choice of the distribution is relatively arbitrary, we can assume that the odds parameter can be drawn from a normal distribution, but parameters are up to us to define based on previous knowledge.
+
+The multilevel model now specifies random effects on the participant ($g_{j}$) and study level ($g_{k}$). We also define parameters for priors for the means and standard deviations. As these effects are interdependent, the model also produces a correlation matrix to explain the covariance. Weakly informative priors drawn from a Student-t or a Cauchy distribution have been recommended by @gelmanPriorDistributionsVariance2006 for hierarchical models, particularly when the number of groups is larger than 3, which we expect in our meta-analyses. Suggested informative priors come from @grekovFlexibleDistributionalModels2025. Although the priors they specified fit the baseline phase only, while we also include the intervention phase, the data is highly similar to our targeted data, as they modelled reading fluency outcomes from single-case designs.
+
+Furthermore, we will incorporate immediate level changes and time trends through session effects and their interaction with the phases. This allows us to capture both the immediate difference and gradual changes happening during the intervention/baseline phase. The model includes random slopes for both session and intervention × session effects at both study and case levels, enabling us to detect heterogeneity in learning trajectories across studies and participants.
+
+LKJ, the Lewandowski-Kurowicka-Joe distribution is a probability distribution over positive-definite symmetric matrices with unit diagonals, i.e., correlation matrices (@gelmanBayesianDataAnalysis2020). We use this distribution as a prior for the correlation matrix of effects in the model and set it as $LKJcorr(2)$ of 2, which makes extreme correlations less likely in the correlation matrix, but still allows for correlations between the effects (@mcelreathStatisticalRethinkingBayesian2020).\
+
+We draw standard deviations from the half-student-t distributions, instead of normal, as it allows the possibility of extreme (tail) values, which helps us accommodate to uncertainty of these values. By defining it as "half", we constrain the distribution only to positive values for the SD.\
+
+Given the way that the designs are bounding the possible answers to a small range, and often conduct interventions until 100% success rate is achieved, we can expect ceiling effects, large effects in the intervention phase and larger improvements (slope) for those with lower baseline results.\
+
+The hierarchical structure of the random effects follows:
+
+$$
+g_{jk} \sim \mathcal{N}(0, \sigma_{j[k]})
 $$
 
 $$
-\mu_{study} \sim Cauchy(\mu_{pop},\sigma_{pop})
+g_k \sim \mathcal{N}(0, \sigma_{k})
 $$
+
+where $g_{jk}$ represents variability among cases within studies, $g_{k}$ stands for variability across studies, $\sigma_{j[k]}$ and $\sigma_{k}$ are the standard deviations at each level.
+
+The variance components follow a hierarchical prior:
+
 $$
-\sigma_{study} \sim HalfStudent(\nu_{pop}, \mu_{pop},\sigma_{pop})
+\sigma_{k} \sim \text{Half-Student}(3, 0, 2.5)
 $$
 
 $$
-\mu_{pop} \sim Student(7, 0, 3)
+\sigma_{j[k]} \sim \text{Half-Student}(3, 0, 2.5)
 $$
 
 $$
-\sigma_{pop} \sim HalfStudent(7, 0, 3)
+\mathbf{R} \sim LKJcorr(2)
+$$
+
+
+$$
+\alpha \sim \text{Student}(3, 3.9, 2.5)
 $$
 
 $$
-\textbf{R} \sim LKJcorr(2)
+\beta_1, \beta_2, \beta_3 \sim \text{Student}(3, 0, 2.5)
 $$
+
 
 $$
 \theta = \Phi
-$$
+$$ 
+
 $$
 \Phi \sim gamma(1,1)
 $$
 
-The multilevel model now specifies random effects on the participant ($g_{participant[i]}$) and study level ($g_{study[i]}$). We also define parameters for priors for the means and standard deviations. As these effects are interdependent, the model also produces a correlation matrix to explain the covariance. 
+### Moderator analysis
 
-LKJ, the Lewandowski-Kurowicka-Joe distribution is a probability distribution over positive-definite symmetric matrices with unit diagonals, i.e., correlation matrices (Gelman, 2020). We use this distribution as a prior for the correlation matrix of effects in the model, and set it as $LKJcorr(2)$ of 2, which makes extreme correlations less likely in the correlation matrix, but still allows for correlations between the effects. 
+We will conduct a moderator analysis based on IQ, as findings by @allorScientificallyBasedReading2014 suggest that lower IQ is linked to lower rates of reading development. Given the way that the designs are bounding the possible answers to a small range, and often conduct interventions until 100% success rate is achieved, we can expect ceiling effects, large effects in the intervention phase and larger improvements (slope) for those with lower baseline results. \
+We will introduce IQ as a continuous predictor in the main model, centered around the group mean. While grand-mean centering might be appropriate given that it is one population of participants, in this case, group-mean centering is preferable due to the likely non-random selection of intellectual disability (ID) severity within studies (@kreftEffectDifferentForms1995, @endersCenteringPredictorVariables2007). Specifically, the selection of participants with a particular severity level (e.g., mild intellectual disability) may influence the intervention complexity. If IQ were centered around the grand mean, this study-level selection bias could distort estimates, making group-mean centering a more appropriate choice to account for within-study variability. 
 
-We draw standard deviations from the half-student-t distributions, instead of normal, as it allows the possibility of extreme (tail) values, which helps us accommodate to uncertainty of these values. By defining it as "half", we constrain the distribution only to positive values for the SD.
+$$
+\text{logit}(\mu_{ijk}) = \alpha + \beta_1 ID_{j} + \beta_2 \text{session}_{i} + \beta_3 ID_j*\text{session}_{i} + g_{jk} + g_k + \gamma_{IQ[j]}
+$$
+$$
+\gamma_{IQ[j]} \sim \mathcal{N}(\mu_{IQ[j]}, \sigma_{IQ[j]})
+$$
 
-Given the way that the designs are bounding the possible answers to a small range, and often conduct interventions until 100% success rate is achieved, we can expect ceiling effects, large effects in the intervention phase and larger improvements (slope) for those with lower baseline results.   
+We will include IQ as a continuous variable rather than using categorical ID severity, as a continuous measure provides more granular and informative modeling of variation. Additionally, there are potentially two types of missing values:\
+
+Missing at random --- where IQ scores are either not reported or not permitted for sharing. \
+Missing not at random --- where IQ scores are unavailable because participants could not be reliably tested due to the severity of their disability.
+
+If the data is not missing at random, we will not conduct a moderator analysis. In case of an MAR type missingness, we will impute the values with the mice package (@mice).
+
+## Model building workflow
+
+We have pre-specified possible alternatives for the models, based on assumptions about the outcome data and intervention characteristics. However, as we do not have data at the moment of specifying the models, we propose a workflow to determine which model will be selected as the main model once we obtain the data.
+
+We will graphically inspect the data to estimate the growth curve based on sessions, to determine whether time influences the outcome linearly or exponentially. 
+
+Table 3 presents alternate priors and functions of the predictors that we will apply to the data and test the model fit. We will select the best model for each meta-analysis as the main model and provide results of the other model alternatives as a sensitivity analysis. 
+
+**Table 3** \
+*Model Specifications and Priors*
+
+| Model  | Session Specification | Priors | Notes |
+|--------|------------------------|--------|-------|
+| **1A** | Linear (session)       | Default `brms` priors | Baseline model |
+| **1B** | Linear (session)       | - `Student_t(3, 0, 2.5)` for `IDIntervention` slope <br> - `Flat()` for `session` slope <br> - `Student_t(3, 3.9, 2.5)` for intercept <br> - `LKJ(2)` for correlations <br> - `Gamma(1, 1)` for `phi` <br> - `Student_t(3, 0, 2.5)` for all group-level SDs | Weakly informative priors based on literature; flat prior on session |
+| **2A** | Splined (session)      | Default `brms` priors | Non-linear learning trajectory using splines |
+| **2B** | Splined (session)      | - `Student_t(3, 0, 2.5)` for `IDIntervention` <br> - `Normal(0, 0.1)` for spline basis coefficients (e.g., `ssession_1`, etc.) <br> - `Student_t(3, 3.9, 2.5)` for intercept <br> - `LKJ(2)` for correlations <br> - `Gamma(1, 1)` for `phi` <br> - `Student_t(3, 0, 2.5)` for group-level SDs <br> - `Student_t(3, 0, 2.5)` for spline smoothness (`sds`) | Informed priors; compatible with prior predictive sampling |
 
 
-### 
+### Initial setup of the models and priors
+
 ```{r}
-library(tidyverse)
-library(brms)
-library(tidybayes)
-library(bayesplot)
-library(ggdist)
-#library(rstanarm)
+#| label: setup
+#| echo: FALSE
+library(tidyverse) #for wrangling data
+library(brms) # for fitting the bayesian models
+library(mgcv) # for modelling smooths within brms
+library(mice) # for imputation of missing values
+library(tidybayes) # for wrangling and plotting brms models 
+library(bayesplot) # for plotting brms models
+library(ggdist) 
+library(patchwork)
+library(here) # for relative paths within the project
+#library(rstanarm) # shows Stan interface within R
 set.seed(2024)
 # get code from: https://michael-franke.github.io/Bayesian-Regression/practice-sheets/11a-cheat-sheet.html
 ```
 
+
 ```{r}
 #| label: data
+#| code-fold: true
+#| code-summary: "Data setup"
 # data will be cleaned here for analyses. We will filter out maintenance and generalization phases for the analysis. We will also filter data based on SCED design and run all models for each category of designs. 
-data <- read_csv("mydata.csv") %>% 
+data <- read_csv(here("analysis", "mydata.csv")) %>% 
   mutate(success_rate = round(success_rate*100, digits = 0),
          fail_rate = round(abs(fail_rate)*100, digits = 0)) %>% 
-  filter(ID != "Maintenance")
+  filter(ID != "Maintenance") %>% # remove unnecessary rows that will not be modeled
+  # filter (intervention == "multiple baseline") %>%  # filter specific SCED designs to model together
+  group_by(study, case, ID) %>%  
+  mutate(session = row_number()) %>%  
+  ungroup() 
 
 #data %>% filter(ID == "intervention") %>% ggplot(aes(x = x, y = success_rate, color = case)) +
 #  geom_point() +
@@ -128,268 +206,349 @@ data <- read_csv("mydata.csv") %>%
 
 ```
 
+### Multiple baseline/probe and AB designs; changing-criterion designs; alternating treatment design
 ```{r}
-#| label: baes-model
-#| output: FALSE
-# "0 + variable" removes the intercept, i.e., shows a separate coefficient for the "ref" group (baseline) and the comparison, vs. having the average intercept and then the difference between groups - it also removes centering parametrization and I want to avoid that so keep in the intercept
+#| label: formula-setup
+#| code-fold: true
+#| code-summary: "Code for the prior and formula setup for MB/AB"
 
-# get_prior extracts all priors defined for the used model. model one will be run with default priors set by the package
-prior <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case), 
-                   data = data, family = beta_binomial())
+# regular session formula
+model_formula <- bf(success_rate|trials(success_rate + fail_rate) ~ session + ID + session:ID + (1 + session + ID | study/case))
 
-# hierarchical model that has success rate as the outcome predicted for each phase (ID) when nested among participants (case) and study (case)
-model_one <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case), 
-                 data = data, 
-                 family = beta_binomial(link = "logit"), # link function for 0 to 1 probabilities
-                 prior = prior, # uses the default priors
-                 warmup = 2000, iter = 4000,
-                 control = list(adapt_delta = 0.99) # fix divergent transitions
-          )
+# sigmoid session formula
+model_formula2 <- bf(success_rate|trials(success_rate + fail_rate) ~ s(session) + ID + s(session, by = ID) + (1 + session + ID | study/case)) 
 
+## priors for default models (linear and sigmoid)
+priors_model_formula <- get_prior(model_formula, data = data, family = beta_binomial())  # linear + default priors
+priors_model_formula$prior[1] <- "normal(0,100)" # for prior predictive check, remove after data collection
+priors_model_formula2 <- get_prior(model_formula2, data = data, family = beta_binomial())  # sigmoid + default priors
+priors_model_formula2$prior[1] <- "normal(0,100)" # for prior predictive check, remove after data collection
 
-```
-
-```{r}
-# density plots per study, code taken from Solomon Kurz https://bookdown.org/content/3686/dichotomous-predicted-variable.html#robust-logistic-regression # 21.4.2.1 Example: Baseball again.
-#nd <- 
-#  data %>% 
-#  group_by(study) %>% 
-#  summarise(success = mean(success_rate) %>% round(0)) %>% 
-#  # to help join with the draws
-#  mutate(name = str_c("V", 1:n()))
-#
-## push the model through `fitted()` and wrangle
-#fitted(model_one,
-#       newdata = data,
-#       re_formula = success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case),
-#       scale = "linear",
-#       summary = F) %>% 
-#  as_tibble() %>% 
-#  pivot_longer(everything()) %>% 
-#  mutate(probability = inv_logit_scaled(value)) %>% 
-#  left_join(nd, by = "name") %>% 
-#  
-#  # plot
-#  ggplot(aes(x = probability, y = study)) +
-#  geom_vline(xintercept = fixef(model_one)[1] %>% inv_logit_scaled(), color = "orange") +
-#  ggridges::geom_density_ridges(color = "red", fill = "pink", size = 1/2,
-#                      rel_min_height = 0.005, scale = .9) +
-#  geom_jitter(data = data,
-#              aes(x = success_rate / (success_rate + fail_rate)),
-#              height = .025, alpha = 1/6, size = 1/6, color = "red") +
-#  scale_x_continuous("Correct Words / All attempts", breaks = 0:5 / 5, expand = c(0, 0)) +
-#  coord_cartesian(xlim = c(0, 1), 
-#                  ylim = c(1, 9.5)) +
-#  ggtitle("Data with Posterior Predictive Distrib.") +
-#  theme(axis.text.y = element_text(hjust = 0),
-#        axis.ticks.y = element_blank())
-```
-
-
-
-```{r}
-#| label: baes-plots
-#get_variables(model_one) #extracts all posterior draw variables
-summary(model_one)
-color_scheme_set("red")
-#posterior predictive check for baseline and intervention fit
-pp_check(model_one, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
-
-#stancode(model_one, data = data, family = beta_binomial(link = "logit"),
-#                 prior = prior) #shows stan code for the model
-#general plots
-plot(model_one)
-# plot the posterior distributions per case nested within their studies
-model_one %>%
-  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>% #extract posterior samples for the population effect and cases nested within study; presents them in a tidy format
-  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study:case`)) %>% #inverse logit to probabilities
-  # mutate(case_mean = inv_logit_scaled(b_IDIntervention + `r_study:case`)) %>% #if we want to plot probabilities instead of OR
-  ggplot(aes(y = `study:case`, x = case_mean)) +
-  ggdist::stat_halfeye(color = "#dddbf1", fill = "#8c2f39") +
-  geom_vline(xintercept = exp(fixef(model_one)[2]), color = "gray") +
-  theme_minimal() +
-  coord_cartesian(xlim = c(0, 80)) # set limits to be between 0 and 1 probability
-
-# plot the posterior distributions of studies
-model_one %>%
-  tidybayes::spread_draws(b_IDIntervention, r_study[study,IDIntervention]) %>% #extract posterior samples for the population effect and cases nested within study; presents them in a tidy format
-  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study`)) %>% #inverse to probabilities
-  # mutate(case_mean = inv_logit_scaled(b_IDIntervention + `r_study`)) %>% #if we want to plot probabilities instead of OR
-  ggplot(aes(y = study, x = case_mean)) +
-  ggdist::stat_halfeye(color = "#dddbf1", fill = "#8c2f39") +
-  theme_minimal() + 
-  coord_cartesian(xlim = c(0,80)) # set limits to be between 0 and 1 probability
-
-```
-```{r}
-#| label: baes-model-one-forest
-pop_effect <- as.data.frame(fixef(model_one)) %>% 
-  rownames_to_column() %>% 
-  pivot_wider(names_from = rowname, values_from = c(Estimate, Est.Error, Q2.5, Q97.5), names_sep = ".") %>% 
-  mutate(rowname = "Population Effect")
-random_effects_one <- ranef(model_one)
-random_effects_one <- as.data.frame(random_effects_one[["study"]]) %>% 
-  rownames_to_column()
-
-forest_model_one <- bind_rows(pop_effect, random_effects_one) 
-
-ggplot(forest_model_one, aes(x = Estimate.IDIntervention, y = rowname)) +
-  geom_errorbar(aes(xmin = Estimate.IDIntervention - 2*Est.Error.IDIntervention, xmax = Estimate.IDIntervention + 2*Est.Error.IDIntervention, width = 0)) +
-  geom_point(color = 'lavender') + 
-  labs(x = 'Estimated Effect of Reading Intervention on Decoding in log-odds (+/- 2sd)', y = "Study") +
-  geom_vline(xintercept = 0, color = '#8c2f39') +
-  xlim(-8, 8)
+## Specifying informative priors for linear model (1B)
+priors_model_formula3 <- c(
+  set_prior("student_t(3, 0, 2.5)", class = "b", coef = "IDIntervention"),   # Fixed effect of intervention
+  set_prior("normal(0,0.1)", class = "b", coef = "session"),                 # uninformative prior for session
+  set_prior("lkj(2)", class = "cor"),                                        # Prior for correlation matrices
+  set_prior("student_t(3, 3.9, 2.5)", class = "Intercept"),                  # Intercept (baseline phase)
+  set_prior("gamma(1, 1)", class = "phi", lb = 0),                           # Phi (precision)
   
+  # Random effects priors
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study:case"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study", coef = "IDIntervention"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study", coef = "Intercept"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study:case", coef = "IDIntervention"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study:case", coef = "Intercept")
+)
+
+## Specifying informative priors for sigmoid model (2B)
+priors_model_formula4 <- c(
+  # Fixed effects
+  set_prior("student_t(3, 0, 2.5)", class = "b", coef = "IDIntervention"),
+  set_prior("normal(0,0.1)", class = "b", coef = "ssession_1"),  # uninformative prior
+  set_prior("lkj(2)", class = "cor"), # Correlations
+  set_prior("student_t(3, 3.9, 2.5)", class = "Intercept"),   # Intercept baseline
+  set_prior("gamma(1, 1)", class = "phi", lb = 0),
+  # Random effect SDs
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study:case"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study", coef = "IDIntervention"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study", coef = "Intercept"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study:case", coef = "IDIntervention"),
+  set_prior("student_t(3, 0, 2.5)", class = "sd", group = "study:case", coef = "Intercept"),
+  # Prior for spline smooth term 
+  set_prior("student_t(3, 0, 2.5)", class = "sds", coef = "s(session)")
+)
 ```
 
-# Main model
-This model is built with more informed priors and will be used in the primary analysis
+### Code for the models
 ```{r}
-#| label: baes-model-two
-#| output: FALSE
-prior_two <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case),
-                   data = data, family = beta_binomial())
+#| label: models
+#| code-fold: true
+#| code-summary: "Code for the models"
 
-prior_two$prior[2] <- "student_t(7,0,3)" #fixed effects / slope; Brehm et al (2021)
-prior_two$prior[3] <- "lkj(2)" # to keep higher correlations less likely
-prior_two$prior[6] <- "cauchy(0,1)" # intercept
-prior_two$prior[7] <- "gamma(1,1)" # phi prior
-prior_two$prior[8] <- "student_t(7, 0, 3)" # more flexible and have better behavior near 0 (gelman, 2006), apparently we should avoid cauchy for sd as it leads to implausibly large values https://statmodeling.stat.columbia.edu/2018/04/03/justify-my-love/
+# model 1A regular session default priors
+fit1 <- brm(formula = model_formula,
+            data = data,
+            family = beta_binomial(link = "logit"),
+            prior = priors_model_formula,
+            warmup = 2000, iter = 4000,
+            control = list(adapt_delta = 0.99), # fix divergent transitions
+            core = parallel::detectCores(),
+            init_r=0.1
+            )
 
-model_two <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case), 
-                 data = data, family = beta_binomial(link = "logit"),
-                 prior = prior_two, warmup = 2000, iter = 4000,
-                 control = list(adapt_delta = 0.99) # fix divergent transitions
-          )
+# model 1B sigmoid session default priors
+fit2 <- brm(formula = model_formula2,
+            data = data,
+            family = beta_binomial(link = "logit"),
+            prior = priors_model_formula2,
+            warmup = 2000, iter = 4000,
+            control = list(adapt_delta = 0.99), # fix divergent transitions
+            core = parallel::detectCores(),
+            init_r=0.1
+            )            
 
+# model 2A regular session informed priors
+fit3 <- brm(formula = model_formula,
+            data = data,
+            family = beta_binomial(link = "logit"),
+            prior = priors_model_formula3,
+            warmup = 2000, iter = 4000,
+            control = list(adapt_delta = 0.99), # fix divergent transitions
+            core = parallel::detectCores(),
+            init_r=0.1
+            )            
+
+# model 2B sigmoid session informed priors
+fit4 <- brm(formula = model_formula2,
+            data = data,
+            family = beta_binomial(link = "logit"),
+            prior = priors_model_formula4,
+            warmup = 2000, iter = 4000,
+            control = list(adapt_delta = 0.99), # fix divergent transitions
+            core = parallel::detectCores(),
+            init_r=0.1
+            )
 ```
 
 
-```{r}
-#| label: baes-plots-two
-summary(model_two)
-color_scheme_set("red")
-#posterior predictive check for baseline and intervention fit
-pp_check(model_two, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
-#get_variables(model_one)
-posterior_two <- as.matrix(model_two)
+### Step 1 - Prior Predictive Checks
+Figure 2 shows prior predictive checks for the 4 suggested models, based on different session function and different priors. The draws are sampled from a sample dataset of single case designs with a proportion outcome, but in a different subject, for purposes of building and testing the model before collecting real data. 
 
-plot_title <- ggtitle("Posterior distributions",
-                      "with medians and 90% intervals")
-mcmc_areas(posterior_two,
-           pars = c("b_Intercept", "b_IDIntervention", "sd_study:case__IDIntervention", "phi"),
-           prob = 0.9) + plot_title
-#general plots
-plot(model_two)
+```{r}
+#| label: ppd
+#| code-fold: true
+#| code-summary: "Prior pred check code"
 #
-model_two %>%
-  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>%
-  mutate(case_mean = exp(b_IDIntervention) + exp(`r_study:case`)) %>% 
-  #mutate(case_mean = inv_logit_scaled(b_IDIntervention + `r_study:case`)) %>% 
-  ggplot(aes(y = `study:case`, x = case_mean)) +
-  ggdist::stat_halfeye(color = "#8c2f39", fill = "#dddbf1") +
-  theme_minimal() +
-  coord_cartesian(xlim = c(-10,80))
+color_scheme_set("red")
+## models are fit with sample_prior = "only" to fit the drawn samples without the observed data
+pp_fit1 <- brm(formula = model_formula,family = beta_binomial(link = "logit"), prior = priors_model_formula, 
+               sample_prior = "only", data = data)
+# model 1B sigmoid session default priors
+pp_fit2 <- brm(formula = model_formula2, family = beta_binomial(link = "logit"), prior = priors_model_formula2, 
+               sample_prior = "only", data = data)
+# model 2A regular session informed priors
+pp_fit3 <- brm(formula = model_formula, family = beta_binomial(link = "logit"), prior = priors_model_formula3, 
+               sample_prior = "only", data = data)
+# model 2B sigmoid session informed priors
+pp_fit4 <- brm(formula = model_formula2, family = beta_binomial(link = "logit"), prior = priors_model_formula4, 
+               sample_prior = "only", data = data)
+
+
+pp1 <- pp_check(pp_fit1, prefix = "ppd", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit1 - linear + default")
+  
+pp2 <- pp_check(pp_fit2, prefix = "ppd", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit2 - linear + informed")
+  
+pp3 <- pp_check(pp_fit3, prefix = "ppd", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit3 - GAM + default")
+  
+pp4 <- pp_check(pp_fit4, prefix = "ppd", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit4 - GAM + informed")
+
+pred_plots <- list(pp1, pp2, pp3, pp4)
+
+patchwork::wrap_plots(pred_plots, ncol = 2, nrow = 2)
+```
+
+**Figure 2**
+![prior predictive check](ppd-1.png)
+
+### Step 2 - Posterior Predictive Checkes
+
+Figure 3 shows posterior predictive checks for the 4 suggested models, based on different session function and different priors, but this time done on observed data after data is collected. 
+
+```{r}
+#| label: ppc
+#| code-fold: true
+#| code-summary: "Posterior pred check code"
+color_scheme_set("blue")
+ppc1 <- pp_check(fit1, type = "dens_overlay_grouped", group = "ID", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit1 - linear + default")
+  
+ppc2 <- pp_check(fit2, type = "dens_overlay_grouped", group = "ID", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit2 - linear + informed")
+  
+ppc3 <- pp_check(fit3, type = "dens_overlay_grouped", group = "ID", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit3 - GAM + default")
+  
+ppc4 <- pp_check(fit4, type = "dens_overlay_grouped", group = "ID", ndraws = 100) + theme(legend.position = "none") + ggtitle("Fit4 - GAM + informed")
+
+post_pred_plots <- list(ppc1, ppc2, ppc3, ppc4)
+
+patchwork::wrap_plots(post_pred_plots, ncol = 2, nrow = 2)
+
 
 ```
 
+**Figure 3**
+![prior predictive check](ppc-1.png)
+
+### Step 3 - Model Comparisons (LOO and WAIC)
+We will conduct leave-one-out cross validation, and its expansion, the Watanabe-Aikake (widely applicable; WAIC) information criterion, to select the best fitted model for the meta-analysis. Based on @gelmanUnderstandingPredictiveInformation2014, LOO and WAIC are more appropriate for partial or complete pooling models. Interpretation will be done based on the WAIC and LOO scores, with the lowest out-of-sample deviance being the criteria for selecting the best fitting model.
+
 
 ```{r}
-#| label: comparison-model
-model_one_ic <- add_criterion(model_one, criterion = "loo")
-model_one_waic <- waic(model_one)
-model_two_ic <- add_criterion(model_two, criterion = "loo")
-model_two_waic <- waic(model_two)
+#| label: model-comparison
+#| code-fold: true
+#| code-summary: "Model comparison code"
+fit1_ic <- add_criterion(fit1, criterion = "loo")
+fit1_waic <- waic(fit1)
+fit2_ic <- add_criterion(fit2, criterion = "loo")
+fit2_waic <- waic(fit2)
+fit3_ic <- add_criterion(fit3, criterion = "loo")
+fit3_waic <- waic(fit3)
+fit4_ic <- add_criterion(fit4, criterion = "loo")
+fit4_waic <- waic(fit4)
 
-w <- loo_compare(model_one_waic, model_two_waic) 
+w <- loo_compare(fit1_waic, fit2_waic, fit3_waic, fit4_waic) 
 print(w, simplify = F)
 
-l <- loo_compare(model_one_ic, model_two_ic) # leave-one-out cross validation
+l <- loo_compare(fit1_ic, fit2_ic, fit3_ic, fit4_ic) # leave-one-out cross validation
 print(l, simplify = F)
 
-# moderator analyses
-#model_gender_ic <- add_criterion(model_gender, criterion = "loo")
-#model_gender_waic <- waic(model_gender)
-#model_iq_ic <- add_criterion(model_iq, criterion = "loo")
-#model_iq_waic <- waic(model_iq)
 ```
 
 
-### Moderator analysis
+### Step 4 - Moderator Analysis
 
-#### IQ
 ```{r}
-#| label: baes-model-iq
-prior_iq <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + IQ, 
-                   data = data, family = beta_binomial())
+#| label: model-iq
+#| code-fold: TRUE
+#| code-summary: "Moderator analysis code"
+# we will center IQ with group mean and model with random slopes
+imp <- mice(data = data, m = 10, print = FALSE) #im
+long_imp <- complete(imp, action='long', include=TRUE)
+long_imp <- long_imp %>% mutate(IQ_gpm = ave(IQ, study), IQ_gpc = IQ - IQ_gpm)
+imp2 <- as.mids(long_imp)
 
-# the model is incorporating IQ as a moderator, set as fixed effect, and uses default priors
-model_iq <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + IQ, 
-                 data = data, family = beta_binomial(link = "logit"),
-                 prior = prior_iq, warmup = 1000, iter = 4000
+formula_iq <- bf(success_rate|trials(success_rate + fail_rate) ~ session + ID + session:ID + IQ (1 + session + ID + IQ | study/case))
+
+prior_iq <- get_prior(formula = formula_iq, 
+                   data = data, 
+                   family = beta_binomial())
+
+fit_iq <- brm_multiple(formula = formula_iq, 
+                 data = imp2, 
+                 family = beta_binomial(link = "logit"),
+                 prior = prior_iq, 
+                 warmup = 1000, iter = 4000,
+                 cores = parallel::detectCores(),
+                 adapt_delta = 0.99
           )
 
-summary(model_iq)
+summary(fit_iq)
 
-#posterior predictive check for baseline and intervention fit
-pp_check(model_iq, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
+# posterior predictive check for baseline and intervention fit
+pp_check(fit_iq, type = "dens_overlay_grouped", group = "ID", ndraws = 100)
 
-plot(model_iq)
+plot(fit_iq)
 ```
 
-```{r}
-#| label: baes-plots-iq
 
-#general plots
-plot(model_iq)
-get_variables(model_iq)
-##
-model_iq %>%
-  tidybayes::spread_draws(b_IDIntervention, `r_study:case`[`study:case`,IDIntervention]) %>%
-  mutate(case_mean = b_IDIntervention + `r_study:case`) %>% #not exponentiated
-  ggplot(aes(y = `study:case`, x = case_mean)) +
-  ggdist::stat_halfeye(color = "#8c2f39", fill = "#dddbf1") +
-  theme_minimal() 
-
-```
-
-### Risk of Bias sensitivity analysis
+### Step 5 - Risk of Bias sensitivity analysis
 ```{r}
 #| label: lo-rob
+#| code-fold: TRUE
+#| code-summary: "Rob sensitity analysis code"
 # do a sensitivity analysis based on risk of bias assessment
 # data_rob <- data %>% filter(rob != "high")
 ```
 
-
-### Exploratory analyses
-# not in the manuscript
+### Step 5 - Visualization
 ```{r}
-#| label: EDA
-# interaction of session (x) and phase (ID)
-#prior_interaction <- get_prior(success_rate | trials(success_rate + fail_rate) ~ (1 | #study/case/ID/x), 
-#                   data = data, family = beta_binomial())
-#
-## this models the interaction between phase and session
-#model_interaction <- brm(success_rate | trials(success_rate + fail_rate) ~ (1 | #study/case/ID/x), #
-#                 data = data, family = beta_binomial(link = "logit"),
-#                 prior = prior_interaction, warmup = 1000, iter = 4000
-#          )
+#| label: vis
+#| code-fold: TRUE
+#| code-summary: "Forest and density plots code"
 
-# modelling all designs together with the design as moderator
-#prior_design <- get_prior(success_rate|trials(success_rate + fail_rate) ~ ID + #(ID|study/case) + design, 
-#                   data = data, family = beta_binomial())
-#
-## the model is incorporating age as a moderator, set as fixed effect, and uses default #priors
-#model_age <- brm(success_rate|trials(success_rate + fail_rate) ~ ID + (ID|study/case) + #design, #
-#                 data = data, family = beta_binomial(link = "logit"),
-#                 prior = prior_design, warmup = 1000, iter = 4000
-#          )
+## forest plot of the intervention effect per study (level)
+fit1 %>% 
+  spread_draws(b_IDIntervention, r_study[study, IDIntervention]) %>%
+  # add the grand mean to the group-specific deviations
+  mutate(mu = b_IDIntervention + r_study) %>%
+  ungroup() %>%
+  mutate(study = str_replace_all(study, "[_]", " ")) %>% 
+  # plot
+  ggplot(aes(x = mu, y = reorder(study, mu))) +
+  geom_vline(xintercept = fixef(fit1)[3, 1], color = "gray", linewidth = 1) + #fixed effect of IDIntervention
+  geom_vline(xintercept = fixef(fit1)[3, 3:4], color = "black", linetype = 2) +
+  stat_halfeye(.width = .95, size = 2/3, fill = "#BA181B", color = "#660708", alpha = 0.6) +
+  labs(x = expression(italic("Log Odds Ratio (level)")),
+       y = NULL) +
+  theme(panel.grid   = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y  = element_text(hjust = 0)) +
+  theme_minimal()
+
+## forest plot of the session effect per study (trend)
+fit1 %>% 
+  spread_draws(b_session, r_study[study, session]) %>%
+  # add the grand mean to the group-specific deviations
+  mutate(mu = b_session + r_study) %>%
+  ungroup() %>%
+  mutate(study = str_replace_all(study, "[_]", " ")) %>% 
+  # plot
+  ggplot(aes(x = mu, y = reorder(study, mu))) +
+  geom_vline(xintercept = fixef(fit1)[2, 1], color = "gray", linewidth = 1) + #fixed effect of session
+  geom_vline(xintercept = fixef(fit1)[2, 3:4], color = "black", linetype = 2) +
+  stat_halfeye(.width = .95, size = 2/3, fill = "#B1A7A6", color = "#660708", alpha = 0.6) +
+  labs(x = expression(italic("Log Odds Ratio (trend)")),
+       y = NULL) +
+  theme(panel.grid   = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y  = element_text(hjust = 0)) +
+  theme_minimal()
+
+## forest plot of the intervention effect per case within study (level)
+fit1 %>% 
+  spread_draws(b_IDIntervention, `r_study:case`[`study:case`, IDIntervention]) %>%
+  # add the grand mean to the group-specific deviations
+  mutate(mu = b_IDIntervention + `r_study:case`) %>%
+  ungroup() %>%
+  mutate(`study:case` = str_replace_all(`study:case`, "[_]", " ")) %>% 
+  # plot
+  ggplot(aes(x = mu, y = reorder(`study:case`, mu))) +
+  geom_vline(xintercept = fixef(fit1)[3, 1], color = "gray", linewidth = 1) + #fixed effect of IDIntervention
+  geom_vline(xintercept = fixef(fit1)[3, 3:4], color = "black", linetype = 2) +
+  stat_halfeye(.width = .95, size = 2/3, fill = "#BA181B", color = "#660708", alpha = 0.6) +
+  labs(x = expression(italic("Log Odds Ratio (level)")),
+       y = NULL) +
+  theme(panel.grid   = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y  = element_text(hjust = 0)) +
+  theme_minimal()
+
+## forest plot of the session effect per case within study (trend)
+fit1 %>% 
+  spread_draws(b_session, `r_study:case`[`study:case`, session]) %>%
+  # add the grand mean to the group-specific deviations
+  mutate(mu = b_session + `r_study:case`) %>%
+  ungroup() %>%
+  mutate(`study:case` = str_replace_all(`study:case`, "[_]", " ")) %>% 
+  # plot
+  ggplot(aes(x = mu, y = reorder(`study:case`, mu))) +
+  geom_vline(xintercept = fixef(fit1)[2, 1], color = "gray", linewidth = 1) + #fixed effect of session
+  geom_vline(xintercept = fixef(fit1)[2, 3:4], color = "black", linetype = 2) +
+  stat_halfeye(.width = .95, size = 2/3, fill = "#B1A7A6", color = "#660708", alpha = 0.6) +
+  labs(x = expression(italic("Log Odds Ratio (trend)")),
+       y = NULL) +
+  theme(panel.grid   = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y  = element_text(hjust = 0)) +
+  theme_minimal()
+
+
+fit1 %>% plot()
 ```
 
-## References
-Jané, M., Xiao, Q., Yeung, S., \*Ben-Shachar, M. S., \*Caldwell, A., \*Cousineau, D., \*Dunleavy, D. J., \*Elsherif, M., \*Johnson, B., \*Moreau, D., \*Riesthuis, P., \*Röseler, L., \*Steele, J., \*Vieira, F., *Zloteanu, M., & ^Feldman, G. (2024). Guide to Effect Sizes and Confidence Intervals. http://dx.doi.org/10.17605/OSF.IO/D8C4G
-Pustejovsky, J. E., & Ferron, J. M. (2017). Research synthesis and meta-analysis of single-case designs. In J. M. Kaufmann, D. P. Hallahan, & P. C. Pullen (Eds.), Handbook of Special Education, 2nd Edition. New York, NY: Routledge.
-Shadish, W. R., & Sullivan, K. J. (2011). Characteristics of single-case designs used to assess intervention effects in 2008. Behavior Research Methods, 43(4), 971–980. https://doi.org/10.3758/s13428-011-0111-y
-Brehm, Z., Wagner, A., VonKaenel, E., Burton, D., Weisenthal, S. J., Cole, M., Pang, Y., & Thurston, S. W. (2021). Selection of inverse gamma and half-t priors for hierarchical models: Sensitivity and recommendations (arXiv:2108.12045). arXiv. http://arxiv.org/abs/2108.12045
-Gelman, A. (2006). Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper). Bayesian Analysis, 1(3), 515–534. https://doi.org/10.1214/06-BA117A
+
+
+### Info
+### References
+
+::: {#refs}
+:::
+
+```{r}
+#| echo: false
+#| include: true
+#| eval: true
+#| output: true
+sessionInfo()
+```
 
