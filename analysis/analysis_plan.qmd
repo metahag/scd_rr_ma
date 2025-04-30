@@ -197,7 +197,8 @@ data <- read_csv(here("analysis", "mydata.csv")) %>%
   # filter (intervention == "multiple baseline") %>%  # filter specific SCED designs to model together
   group_by(study, case, ID) %>%  
   mutate(session = row_number()) %>%  
-  ungroup() 
+  ungroup() %>%
+  mutate(ID = as.factor(ID))
 
 #data %>% filter(ID == "intervention") %>% ggplot(aes(x = x, y = success_rate, color = case)) +
 #  geom_point() +
