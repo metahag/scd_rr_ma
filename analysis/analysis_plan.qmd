@@ -420,10 +420,15 @@ imp2 <- as.mids(long_imp)
 
 # ensure no zero values so betabinomial doesn't break
 long_imp <- long_imp %>%
+  rowwise() %>%
   mutate(
     success_rate = ifelse(success_rate == 0, 0.5, success_rate),
-    fail_rate = ifelse(fail_rate == 0, 0.5, fail_rate)
-  )
+    fail_rate = ifelse(fail_rate == 0, 0.5, fail_rate),
+    total = success_rate + fail_rate,
+    success_rate = round(success_rate / total * 100),
+    fail_rate = 100 - success_rate
+  ) %>%
+  ungroup()
 
 
 formula_iq <- bf(success_rate|trials(success_rate + fail_rate) ~ session + ID + session:ID + IQ + (1 + session + ID + IQ | study/case))
@@ -435,6 +440,7 @@ prior_iq <- get_prior(formula = formula_iq,
 fit_iq <- brm_multiple(formula = formula_iq, 
                  data = imp2, 
                  family = beta_binomial(link = "logit"),
+                 inits = function() list(phi = 5),  # phi must be > 0
                  prior = prior_iq, 
                  warmup = 1000, iter = 4000,
                  cores = parallel::detectCores(),
