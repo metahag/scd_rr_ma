@@ -418,7 +418,15 @@ long_imp <- complete(imp, action='long', include=TRUE)
 long_imp <- long_imp %>% mutate(IQ_gpm = ave(IQ, study), IQ_gpc = IQ - IQ_gpm)
 imp2 <- as.mids(long_imp)
 
-formula_iq <- bf(success_rate|trials(success_rate + fail_rate) ~ session + ID + session:ID + IQ (1 + session + ID + IQ | study/case))
+# ensure no zero values so betabinomial doesn't break
+long_imp <- long_imp %>%
+  mutate(
+    success_rate = ifelse(success_rate == 0, 0.5, success_rate),
+    fail_rate = ifelse(fail_rate == 0, 0.5, fail_rate)
+  )
+
+
+formula_iq <- bf(success_rate|trials(success_rate + fail_rate) ~ session + ID + session:ID + IQ + (1 + session + ID + IQ | study/case))
 
 prior_iq <- get_prior(formula = formula_iq, 
                    data = data, 
@@ -430,7 +438,7 @@ fit_iq <- brm_multiple(formula = formula_iq,
                  prior = prior_iq, 
                  warmup = 1000, iter = 4000,
                  cores = parallel::detectCores(),
-                 adapt_delta = 0.99
+                 control = list(adapt_delta = 0.99) # fix divergent transitions
           )
 
 summary(fit_iq)
