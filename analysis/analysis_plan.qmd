@@ -1,7 +1,7 @@
 ---
 title: "Analysis plan"
 author: "Lucija Batinović"
-format: 
+format:
   html:
     embed-resources: true
     self-contained-math: true 
@@ -12,8 +12,8 @@ execute:
   message: FALSE
   warning: FALSE
   error: FALSE
-  output: FALSE
-  eval: FALSE
+  output: TRUE
+  eval: TRUE
 bibliography: analysis_refs.bib
 bibliographystyle: apa
 ---
@@ -38,7 +38,7 @@ We will conduct separate analyses for each category of reading intervention (pho
 In the first group, we will aggregate multiple baseline designs (and their variants), and multiple probe designs. We consider these designs similar in logic, and as long as the intervention and outcome are kept homogeneous, we can model the variations in measurement and intervention setup across stages as random variation. \
 In the second group, we will synthesise changing-criterion (CC) designs. We will model CC designs according to the same formula as multiple baseline/AB designs, but separately from those designs. This aligns with the suggested analytical approach by  @shadishAnalyzingDataSingleCase2013, which suggested an analytical approach where one regards all criterion phases as the intervention phase and compares to the baseline (ignoring the stabilizing phases between criterion phases). Although modelling the CC design this way would functionally make it comparable to multiple baseline/AB design setup, the staggered nature of CC designs might artificially flatten the slope compared to AB or multiple baseline designs, where the mastery of the final desired outcome may come immediately, or at least early in the intervention phase. \
 
-The third group will consist of multiple-treatment designs, including multi-element designs, alternating-treatment designs (ATD), adapted alternating-treatment designs (AATD), and simultaneous-treatment designs. For studies using ATD, we will follow a structured extraction workflow: First, we will verify that a baseline phase is present, either as a pre-intervention phase or a comparison phase without treatment. If no baseline is available, the study will be excluded from extraction. If a baseline is present, we will assess the treatment phases. If both treatments do not belong to the same intervention category, the study will not be included in the analysis. Studies without a baseline/no treatment condition or comparing different intervention categories would not answer our research question which does not focus on the relative effectiveness of interventions. The baseline data will be explicitly modeled as "Baseline," and the superior treatment data will be modeled as "Intervention," extracting all available points. In all cases, data extraction will be done sequentially to maintain the chronological order of sessions in the dataset. These analyses follow modelling alternatives suggested by @manolovMetaanalysisSinglecaseExperimental2023a and @moeyaertEstimatingInterventionEffects2015a, based on the decision trees driven by the research question.\
+The third group will consist of comparative study designs designs (Ledford & Gast, 2018). For studies using ATD, we will follow a structured extraction workflow: First, we will verify that a baseline phase is present, either as a pre-intervention phase or a comparison phase without treatment. If no baseline is available, the study will be excluded from extraction. If a baseline is present, we will assess the treatment phases. If both treatments do not belong to the same intervention category, the study will not be included in the analysis. Studies without a baseline/no treatment condition or comparing different intervention categories would not answer our research question which does not focus on the relative effectiveness of interventions. The baseline data will be explicitly modeled as “Baseline,” and the superior treatment data will be modeled as “Intervention,” extracting all available points. In all cases, data extraction will be done sequentially to maintain the chronological order of sessions in the dataset.  These analyses follow modelling alternatives suggested by @manolovMetaanalysisSinglecaseExperimental2023a and @moeyaertEstimatingInterventionEffects2015a, based on the decision trees driven by the research question.\
 
 If we happen to find alternating/reversal phase designs (i.e., ABAB designs), we will aggregate them in the fourth group, although due to the nature of the intervention (learning effects), we do not expect to find studies with these designs. \
 
@@ -68,8 +68,6 @@ $$
 $$
 
 Here, $\alpha$ is the global intercept, $\beta_1$ represents the main effect of the ID (i.e., phase), $\beta_2$ represents the main effect of session (i.e., measurement occasions), $\beta_3 ID_j*session_i$ represents the interaction of session and phase, $g_{jk}$ is the participant-level random effect nested within the study, $g_k$ is the study-level random effect. The ID variale stands for phase. In case of AB, multiple baseline and changing criterion designs, phase will represent both baseline and intervention. In eligible alternating treatment designs, it will represent baseline, intervention 1 and intervention 2.
-
-Next parameters we have to specify for the Bayesian model would be the priors for the distribution parameters. We take the first function and add a prior for the average probability parameter ($\mu$) which is a log odds probability of success ($\alpha_{treatment[i]}$), with the $treatment$ index implying whether it's baseline or intervention. We draw the $\alpha$ from a normal distribution with a $mean$ of 0 and $SD$ of 1.5. The choice of the distribution is relatively arbitrary, we can assume that the odds parameter can be drawn from a normal distribution, but parameters are up to us to define based on previous knowledge.
 
 The multilevel model now specifies random effects on the participant ($g_{j}$) and study level ($g_{k}$). We also define parameters for priors for the means and standard deviations. As these effects are interdependent, the model also produces a correlation matrix to explain the covariance. Weakly informative priors drawn from a Student-t or a Cauchy distribution have been recommended by @gelmanPriorDistributionsVariance2006 for hierarchical models, particularly when the number of groups is larger than 3, which we expect in our meta-analyses. Suggested informative priors come from @grekovFlexibleDistributionalModels2025. However, their specified priors fit the baseline phase only, while we also include the intervention phase. Nevertheless, their data are highly similar to our target data, as they modelled reading fluency outcomes from single-case designs.
 
@@ -150,9 +148,7 @@ We have pre-specified possible alternatives for the models, based on assumptions
 
 We will graphically inspect the data to estimate the growth curve based on sessions, to determine whether time influences the outcome linearly or exponentially. \
 
-While there is a possibility that none of the models will provide an adequate fit, this appears unlikely based on pilot analyses of similar interventions. If none of the models are satisfactory based on the criteria followed in the workflow, we will report all models in the main analysis and interpret the results with appropriate caution, explicitly discussing the limitations. \ 
-
-Additionally, as an exploratory analysis, we will perform prior predictive checks using data simulated with the The Alternating Renewal Process Simulator ([https://jepusto.shinyapps.io/ARPsimulator/](https://jepusto.shinyapps.io/ARPsimulator/)) to assess whether our prior distributions yield plausible outcomes. If needed, we will refine the priors based solely on these simulations. All prior predictive checks and any adjustments to the priors will be conducted prior to fitting the new models to the observed outcome data. 
+While there is a possibility that none of the models will provide an adequate fit, this appears unlikely based on pilot analyses of similar interventions. If none of the models are satisfactory based on the criteria followed in the workflow, we will report all models in the main analysis and interpret the results with appropriate caution, explicitly discussing the limitations.  Additionally, we will perform exploratory analyses to better understand the data. \
 
 Table 3 presents alternate priors and functions of the predictors that we will apply to the data and test the model fit. We will select the best model for each meta-analysis as the main model and provide results of the other model alternatives as a sensitivity analysis. 
 

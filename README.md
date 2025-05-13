@@ -13,6 +13,8 @@ Project Root
     └── Project file for RStudio.
 ```
 
+CodeOcean capsule for the Stage 1 code: (https://doi.org/10.24433/CO.4098544.v1)[https://doi.org/10.24433/CO.4098544.v1] takes cca 8 hours to complete the run.
+
 # Files and Folder Descriptions 
 
 **analysis_plan.qmd**
