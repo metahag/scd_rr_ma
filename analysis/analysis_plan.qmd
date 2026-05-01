@@ -824,8 +824,8 @@ re_means %>%
   select(ID, .epred, .lower, .upper) %>%
   kableExtra::kable(
     caption = "Expected Predicted Word Recognition Success - nested within case and study",
-    digits = 1,
-    col.names = c("Phase", "EPP (%)", "Lower 90% CrI", "Upper 90% CrI")
+    digits = 1#,
+    #col.names = c("Phase", "EPP (%)", "Lower 90% CrI", "Upper 90% CrI")
   )
 
 re_preds %>%
@@ -836,8 +836,8 @@ re_preds %>%
   select(ID, .prediction, .lower, .upper) %>% 
   kableExtra::kable(
     caption = "Average Predicted Word-recognition Success - nested within case and study",
-    digits = 1,
-    col.names = c("Phase", "Predicted Probability (%)", "Lower 90% PI", "Upper 90% PI")
+    digits = 1#,
+    #col.names = c("Phase", "Predicted Probability (%)", "Lower 90% PI", "Upper 90% PI")
   )
 
 ################################################################        
@@ -870,12 +870,12 @@ rq_one_pred_pop <- avg_predictions(fit1,
 
 
 rq_one_pred_pop %>% kableExtra::kable(
-    caption = "Marginal effect of the Intervention on Word Recognition - average population effect",
-                                 col.names = c("Phase", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
+    caption = "Marginal effect of the Intervention on Word Recognition - average population effect"
+                                 #col.names = c("Phase", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
                                )
 
-rq_one_pred_study %>% kableExtra::kable(caption = "Marginal effect of the Intervention on Word Recognition - study effect",
-                                 col.names = c("Phase", "Study", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
+rq_one_pred_study %>% kableExtra::kable(caption = "Marginal effect of the Intervention on Word Recognition - study effect"
+                                 #col.names = c("Phase", "Study", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
                                )
 
 ######################################################################################### 
@@ -906,12 +906,12 @@ rq_one_slope_pop <- avg_slopes(fit1,
                                conf_level = 0.9) 
 
 
-rq_one_slope_pop %>% select(-contrast) %>% kableExtra::kable(caption = "Marginal Effect of the Session-Intervention Interaction on Word Recignition - average population effect",
-                                 col.names = c("Slope", "Phase", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
+rq_one_slope_pop %>% select(-contrast) %>% kableExtra::kable(caption = "Marginal Effect of the Session-Intervention Interaction on Word Recignition - average population effect"
+                                 #col.names = c("Slope", "Phase", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
                                )
 
-rq_one_slope_study %>% select(-contrast) %>% kableExtra::kable(caption = "Marginal Effect of the Session-Intervention Interaction on Word Recignition - study effect",
-                                 col.names = c("Slope", "Phase", "Study", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
+rq_one_slope_study %>% select(-contrast) %>% kableExtra::kable(caption = "Marginal Effect of the Session-Intervention Interaction on Word Recignition - study effect"
+                                 #col.names = c("Slope", "Phase", "Study", "Estimated Probability (%)", "Lower Credible Interval", "Higher Credible Interval")
                                )
 
 # Check how many unique study-case combinations we have
@@ -1003,12 +1003,12 @@ IQ_rq_one_pred_pop <- avg_predictions(
 
 IQ_rq_one_pred_pop %>%
   kableExtra::kable(caption = "Marginal Effect of the IQ moderator on the relationship between the intervention and word recognition - average population effect",
-    col.names = c("IQ level", "Phase", "Estimated Probability (%)", "Lower Credible Interval", "Upper Credible Interval"),
+    #col.names = c("IQ level", "Phase", "Estimated Probability (%)", "Lower Credible Interval", "Upper Credible Interval"),
 note = "IQ is set at three levels - 10 points below study mean, study mean, 10 points above study mean")
 
 IQ_rq_one_pred_study %>%
   kableExtra::kable(caption = "Marginal Effect of the IQ moderator on the relationship between the intervention and word recognition - study effect",
-    col.names = c("IQ level", "Phase", "Study", "Estimated Probability (%)", "Lower Credible Interval", "Upper Credible Interval"),
+    #col.names = c("IQ level", "Phase", "Study", "Estimated Probability (%)", "Lower Credible Interval", "Upper Credible Interval"),
 note = "IQ is set at three levels - 10 points below study mean, study mean, 10 points above study mean")
 
 ######################################################################################### 
@@ -1047,13 +1047,13 @@ IQ_rq_one_slope_pop <- avg_slopes(
 IQ_rq_one_slope_pop %>%
   select(-contrast) %>%
   kableExtra::kable(
-    col.names = c("Slope", "IQ level", "Phase", "Estimated Probability Change (%)", "Lower Credible Interval", "Upper Credible Interval")
+    #col.names = c("Slope", "IQ level", "Phase", "Estimated Probability Change (%)", "Lower Credible Interval", "Upper Credible Interval")
   )
 
 IQ_rq_one_slope_study %>%
   select(-contrast) %>%
   kableExtra::kable(
-    col.names = c("Slope", "IQ level", "Phase", "Study", "Estimated Probability Change (%)", "Lower Credible Interval", "Upper Credible Interval")
+    #col.names = c("Slope", "IQ level", "Phase", "Study", "Estimated Probability Change (%)", "Lower Credible Interval", "Upper Credible Interval")
   )
 
 
