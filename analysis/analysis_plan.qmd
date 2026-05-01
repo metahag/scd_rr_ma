@@ -202,18 +202,18 @@ Given the way that the designs are bounding the possible answers to a small rang
 We will conduct a moderator analysis based on IQ, as findings by @allorScientificallyBasedReading2014 suggest that lower IQ is linked to lower rates of reading development. \
 We will introduce IQ as a continuous predictor in the main model, centered around the group mean. While grand-mean centering might be appropriate given that it is one population of participants, in this case, group-mean centering is preferable due to the likely non-random selection of intellectual disability severity within studies (@kreftEffectDifferentForms1995, @endersCenteringPredictorVariables2007). Specifically, the selection of participants with a particular severity level (e.g., mild intellectual disability) may influence the intervention complexity. If IQ were centered around the grand mean, this study-level selection bias could distort estimates, making group-mean centering a more appropriate choice to account for within-study variability. IQ moderator is introduced at the participant level (Level 2 of the multilevel model).
 
-Breaking this down, we set the initial equation at Level 1 (sessions within participants) from @eq-betabin, and then introduce the group-centered IQ predictor at the participant level nested within studies (Level 2):
+Breaking this down, we set the initial equation at Level 1 (sessions within participants) from @eq-one, and then introduce the group-centered IQ predictor at the participant level nested within studies (Level 2):
 
 $$
 \begin{align}
-\beta_{0jk} = \alpha_{00k} + \alpha_{01k} IQ^c_{jk} + \psi_{0jk} \\
-\beta_{1jk} = \alpha_{10k} + \alpha_{11k} IQ^c_{jk} + \psi_{1jk} \\
-\beta_{2jk} = \alpha_{20k} + \alpha_{21k} IQ^c_{jk} + \psi_{2jk} \\
-\beta_{3jk} = \alpha_{30k} + \alpha_{31k} IQ^c_{jk} + \psi_{3jk} \\
+\beta_{0jk} = \alpha_{00k} + \eta_{01} IQ^c_{jk} + \psi_{0jk} \\
+\beta_{1jk} = \alpha_{10k} + \eta_{11} IQ^c_{jk} + \psi_{1jk} \\
+\beta_{2jk} = \alpha_{20k} + \eta_{21} IQ^c_{jk} + \psi_{2jk} \\
+\beta_{3jk} = \alpha_{30k} + \eta_{31} IQ^c_{jk} + \psi_{3jk} \\
 \end{align}
 $$ {#eq-iql2}
 
-@eq-iql2 describes the centered IQ introduced at the participant level as the moderator of baseline ($\alpha_{01k}\operatorname{IQ^c}_{jk}$), the session (baseline trend), phase (level shift), and the session-by-phase (trend) ($\alpha_{11k}\operatorname{IQ^c}_{jk}$, $\alpha_{21k}\operatorname{IQ^c}_{jk}$, $\alpha_{31k}\operatorname{IQ^c}_{jk}$, resp.). $\psi_{0jk}$, $\psi_{1jk}$, $\psi_{2jk}$, $\psi_{3jk}$ represent the individual-level random effects following the same structure as presented in @eq-three.
+@eq-iql2 describes the centered IQ introduced as a participant-level fixed effect moderator of baseline ($\eta_{01}\operatorname{IQ^c}_{jk}$), the session (baseline trend), phase (level shift), and the session-by-phase (trend) ($\eta_{11}\operatorname{IQ^c}_{jk}$, $\eta_{21}\operatorname{IQ^c}_{jk}$, $\eta_{31}\operatorname{IQ^c}_{jk}$, resp.). $\psi_{0jk}$, $\psi_{1jk}$, $\psi_{2jk}$, $\psi_{3jk}$ represent the individual-level random effects following the same structure as presented in @eq-three.
 
 We will include IQ as a continuous variable rather than using categorical intellectual disability severity, as a continuous measure provides more granular and informative modeling of variation. Additionally, there are potentially two types of missing values:\
 
@@ -226,11 +226,11 @@ If the data is not missing at random, we will not conduct a moderator analysis. 
 
 We have pre-specified possible alternatives for the models, based on assumptions about the outcome data and intervention characteristics. However, as we do not have data at the moment of specifying the models, we propose a workflow to determine which model will be selected as the most fitting model once we obtain the data.
 
-We will graphically inspect the data to estimate the growth curve based on sessions, to determine whether time influences the outcome linearly (@eq-betabin) or non-linearly (@eq-thirteen). @eq-thirteen describes a generalized additive model (GAM) with session assumed to be a non-linear predictor. 
+We will graphically inspect the data to estimate the growth curve based on sessions, to determine whether time influences the outcome linearly (@eq-one) or non-linearly (@eq-thirteen). @eq-thirteen describes a generalized additive model (GAM) with session assumed to be a non-linear predictor. 
 
 Unlike the linear specification, which allows all four components (baseline level and trend, level shift, and slope change) to vary across studies and cases, a direct non-linear alternative with smooth functions varying at both study and case levels is not feasible within the planned model. With the increased complexity of the models, additional variations would be difficult to reliably estimate and interpret. Therefore, GAMs will be interpreted as flexible nonlinear extensions of the population effects, with between-study and between-case heterogeneity captured through the original linear multilevel structure of the model, rather than through fully varying smooth functions. 
 
-Accordingly, we will specify the generalized additive model as described in @eq-thirteen, where $\beta_{0jk}$ represents the baseline performance, $\beta_{1jk}\operatorname{ID}_{ijk}$ represents the level change between phases, but unlike @eq-one, baseline slope and difference between baseline and intervention slope coefficients are modeled as smooth terms $f_0(session_{ijk})$ and $\operatorname{ID}_{ijk} f_1(session_{ijk})$. Multilevel structure of study- and participant-level random effects is described in @eq-four and @eq-five. \
+Accordingly, we will specify the generalized additive model as described in @eq-thirteen, where $\beta_{0jk}$ represents the baseline performance, $\beta_{1jk}\operatorname{ID}_{ijk}$ represents the level change between phases, but unlike @eq-one, baseline slope and difference between baseline and intervention slope coefficients are modeled as smooth terms $f_0(session_{ijk})$ and $\operatorname{ID}_{ijk} f_1(session_{ijk})$. Multilevel structure of study- and participant-level random effects is described in @eq-four and @eq-two. \
 
 $$
 \operatorname{logit}(\mu_{ijk}) = \beta_{0jk} + \beta_{1jk}\operatorname{ID}_{ijk} + f_0(session_{ijk}) + \operatorname{ID}_{ijk} f_1(session_{ijk})
