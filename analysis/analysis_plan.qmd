@@ -4,7 +4,7 @@ author: "Lucija Batinović"
 format: 
   html:
     embed-resources: true
-    self-contained-math: true 
+    self-contained-math: true
 theme: lux
 editor: source
 execute: 
@@ -66,13 +66,13 @@ Beta-binomial distribution can be explained as a binomial distribution that has 
 
 
 $$
-\operatorname{logit}(\mu_{ijk}) = \beta_{0jk} + \beta_{1jk} \operatorname{session}_{ijk} + \beta_{2jk}  \operatorname{ID}_{ijk} + \beta_{3jk} \operatorname{ID}_{ijk}*\operatorname{session}_{ijk} 
+\operatorname{logit}(\mu_{ijk}) = \beta_{0jk} + \beta_{1jk} \operatorname{session}_{ijk} + \beta_{2jk}  \operatorname{ID}_{ijk} + \beta_{3jk}\operatorname{session\_intervention}_{ijk} 
 $$ {#eq-one}
 
 
-In @eq-one $\beta_{0jk}$ represents the baseline log-odds at the first baseline session. $\beta_{1jk} \operatorname{session}_{ijk}$ is the baseline slope on log-odds scale, i.e., the change in outcome during the baseline phase at the following sessions. $\beta_{2jk} \operatorname{ID}_{ijk}$ represents the log-odds level change, i.e., the difference between the predicted outcome at the first baseline session and the predicted outcome when the intervention is introduced (first intervention session). Finally, the change in log-odds slope predicted by the interaction between the session and phase is estimated by $\beta_{3jk} \operatorname{ID}_{ijk}*\operatorname{session}_{ijk}$, with the intervention trend presented by $\beta_{1jk}$ + $\beta_{3jk}$. 
+In @eq-one $\beta_{0jk}$ represents the baseline log-odds at the first baseline session. $\beta_{1jk} \operatorname{session}_{ijk}$ is the baseline slope on log-odds scale, i.e., the change in outcome during the baseline phase at the following sessions. $\beta_{2jk} \operatorname{ID}_{ijk}$ represents the log-odds level change, i.e., the difference between the predicted outcome at the first baseline session and the predicted outcome when the intervention is introduced (first intervention session). Finally, the change in log-odds slope predicted by the interaction between the session and phase is estimated by $\beta_{3jk}\operatorname{session\_intervention}_{ijk}$, with the intervention trend presented by $\beta_{1jk}$ + $\beta_{3jk}$. 
 
-We will introduce the session parameter centered by phase and case, which means that both phases (baseline and intervention) will begin with session 0 within each case. This indexing will allow us to interpret the level-shift coefficient (i.e., IDIntervention coefficient) as the difference between the phases at session 0. Furthermore, we will be able to compare the change in slope between baseline and intervention via the interaction term coefficient (i.e., session:IDIntervention).
+We will introduce a session-by-intervention parameter centered at the intervention introduction within each case. Specifically, the first intervention session will be coded as 0, baseline sessions will be coded as 0 on this variable, and the following intervention sessions will increase sequentially. This indexing will allow us to interpret the level-shift coefficient (i.e., IDIntervention coefficient) as the difference between the predicted baseline outcome and the predicted intervention outcome at the first intervention session. Furthermore, the session_intervention coefficient will represent the change in slope between the baseline and intervention phases.
 
 The model estimates baseline level and trend, along with changes in level and slope following the intervention. Random effects for these four components are estimated at both the participant and study level, allowing learning trajectories to vary across individuals within studies (jk) and across studies (k). 
 
@@ -230,16 +230,17 @@ We will graphically inspect the data to estimate the growth curve based on sessi
 
 Unlike the linear specification, which allows all four components (baseline level and trend, level shift, and slope change) to vary across studies and cases, a direct non-linear alternative with smooth functions varying at both study and case levels is not feasible within the planned model. With the increased complexity of the models, additional variations would be difficult to reliably estimate and interpret. Therefore, GAMs will be interpreted as flexible nonlinear extensions of the population effects, with between-study and between-case heterogeneity captured through the original linear multilevel structure of the model, rather than through fully varying smooth functions. 
 
-Accordingly, we will specify the generalized additive model as described in @eq-thirteen, where $\beta_{0jk}$ represents the baseline performance, $\beta_{1jk}\operatorname{ID}_{ijk}$ represents the level change between phases, but unlike @eq-one, baseline slope and difference between baseline and intervention slope coefficients are modeled as smooth terms $f_0(session_{ijk})$ and $\operatorname{ID}_{ijk} f_1(session_{ijk})$. Multilevel structure of study- and participant-level random effects is described in @eq-four and @eq-two. \
+Accordingly, we will specify the generalized additive model as described in @eq-thirteen, where $\beta_{0jk}$ represents the baseline performance, $\beta_{1jk}\operatorname{ID}_{ijk}$ represents the level change between phases, but unlike @eq-one, baseline slope and difference between baseline and intervention slope coefficients are modeled as smooth terms $f_0(session_{ijk})$ and $f_1(session\_intervention_{ijk})$. Multilevel structure of study- and participant-level random effects is described in @eq-four and @eq-two. \
 
 $$
-\operatorname{logit}(\mu_{ijk}) = \beta_{0jk} + \beta_{1jk}\operatorname{ID}_{ijk} + f_0(session_{ijk}) + \operatorname{ID}_{ijk} f_1(session_{ijk})
+\operatorname{logit}(\mu_{ijk}) = \beta_{0jk} + \beta_{1jk}\operatorname{ID}_{ijk} + f_0(session_{ijk}) + f_1(session\_intervention_{ijk})
 $$ {#eq-thirteen}
 
-The smoothing terms $f_{0,1}(session_{ijk})$ consist of a sum of $M$ simpler basis function $\operatorname{b_{m}}(\operatorname{session}_{ijk})$ and its corresponding coefficients $\beta_{m}$, as described in @eq-spline (@Pedersen2019HGAM). We will use the default values from the smooths function in $\texttt{brms}$, provided by the $\texttt{mgcv}$ package (@mgcv).
+The smoothing terms $f_0(session_{ijk})$ and $f_1(session_intervention_{ijk})$ consist of a sum of $M$ simpler basis function $\operatorname{b_{m}}(\operatorname{session}_{ijk})$ and its corresponding coefficients $\beta_{m}$, as described in @eq-spline (@Pedersen2019HGAM). We will use the default values from the smooths function in $\texttt{brms}$, provided by the $\texttt{mgcv}$ package (@mgcv).
 
 $$
-f_{0,1}(\operatorname{session}_{ijk}) = \sum_{m=1}^{M}\beta^{(0,1)}_{m}\operatorname{b_{m}}(\operatorname{session}_{ijk})
+f_0(session_{ijk}) = \sum_{m=1}^{M}\beta^{(0)}_{m}\operatorname{b_m}(session_{ijk})
+f_1(session\_intervention_{ijk}) = \sum_{m=1}^{M}\beta^{(1)}_{m}\operatorname{b_m}(session\_intervention_{ijk})
 $$ {#eq-spline}
 
 Table 3 presents initial alternate priors and functions of the predictors that we will apply to the data and test the model fit. The weakly-informative priors are model-specific, and generic regularizing priors, and the initial benchmarking set will be derived from default priors assigned by $\texttt{brms}$. Prior evaluation will be conducted through a prior predictive check during the analysis in Stage 2. Based on these evaluations, weakly informative priors may be refined as needed. We will compare models using LOO and WAIC to select the best model for each meta-analysis as the main model and provide the results of the other model alternatives as a sensitivity analysis. 
@@ -299,16 +300,35 @@ data <- read_csv(here("analysis", "mydata.csv")) %>%
   mutate(success_rate = round(success_rate*100, digits = 0),
          fail_rate = round(abs(fail_rate)*100, digits = 0)) %>% 
   filter(ID != "Maintenance") %>% # remove unnecessary rows that will not be modeled
-  # filter (intervention == "multiple baseline") %>%  # filter specific SCED designs to model together
-  group_by(study, case, ID) %>%  
-  mutate(session = row_number()) %>%  
-  ungroup() %>%
-  mutate(ID = factor(ID, levels = c("Baseline", "Intervention")))  %>% 
-  group_by(study, case) %>% 
+  # filter (intervention == "multiple baseline") %>%  # filter specific SCED designs to model together %>% 
+  # Keep only case/outcome series that contain both phases
+  group_by(study, case, measure) %>% 
+  filter(any(ID == "Intervention")) %>% 
+  ungroup() %>% 
   mutate(
-  session = pmax(0, session - min(session[ID=="Intervention"]))
-)
-
+    ID = factor(ID, levels = c("Baseline", "Intervention")),
+    intervention = if_else(ID == "Intervention", 1L, 0L)
+  ) %>% 
+  group_by(study, case, measure) %>% 
+  arrange(x, .by_group = TRUE) %>% 
+  # ITS https://chrissyhroberts.github.io/Code_Book/Interrupted_Time_Series.html#part-one---uncontrolled-its-one-intervention
+  mutate(
+    # Session starts at 0 for each case/outcome
+    session = row_number() - 1L,
+    # First intervention session within this case/outcome
+    first_intervention_session = min(session[intervention == 1L], na.rm = TRUE),
+    # 0 throughout baseline and 0 at the first intervention point
+    session_intervention = if_else(
+      intervention == 1L,
+      session - first_intervention_session,
+      0L
+    )
+  ) %>% 
+  ungroup() %>% 
+  mutate(
+    ID = relevel(ID, ref = "Baseline"),
+    case_id = interaction(study, case, measure, drop = TRUE)
+  )
 
 
 #### quick version of the code
@@ -328,7 +348,7 @@ ndraws_small <- if (run_fast) 50 else 1000
 # optional: use only a subset of data in fast mode
 data_demo <- if (run_fast) {
   data %>%
-    group_by(study, case, ID) %>%
+    group_by(study, case, measure, ID) %>%
     slice_head(n = 5) %>%    # only first few sessions per case
     ungroup()
 } else {
@@ -350,12 +370,12 @@ data_demo <- if (run_fast) {
 
 ################################# FORMULA #################################
 # regular session formula
-model_formula <- bf(success_rate|trials(success_rate + fail_rate) ~ session + ID + session:ID + (1 + session + ID + session:ID | study/case)) 
+model_formula <- bf(success_rate|trials(success_rate + fail_rate) ~ session + ID + session_intervention + (1 + session + ID + session_intervention | study/case)) 
 
 # nonlinear session formula - run in the real analysis
-#model_formula2 <- bf(success_rate|trials(success_rate + fail_rate) ~ + ID + s(session) + s(session, by = ID) + (1 + session + ID + session:ID | study/case)) 
+#model_formula2 <- bf(success_rate|trials(success_rate + fail_rate) ~ + ID + s(session) + s(session_intervention) + (1 + session + ID + session_intervention | study/case)) 
 
-model_formula2 <- bf(success_rate | trials(success_rate + fail_rate) ~ ID + s(session, k = 4) + s(session, by = ID, k = 4) + (1 + session + ID + session:ID | study/case)) #test formula 
+model_formula2 <- bf(success_rate | trials(success_rate + fail_rate) ~ ID + s(session, k = 4) + s(session_intervention, k = 4) + (1 + session + ID + session_intervention | study/case)) #test formula 
 
 ################################# PRIORS #################################
 
@@ -644,8 +664,9 @@ imputed_datasets <- lapply(1:2, function(i) { #change to 1:10
 
 # moderator model
 formula_iq <- bf(
-  success_rate | trials(success_rate + fail_rate) ~
-    session * ID * IQ_gpc + (1 + session * ID | study/case)
+ success_rate|trials(success_rate + fail_rate) ~
+    (session + ID + session_intervention) * IQ_gpc +
+    (1 + session + ID + session_intervention | study/case)
 )
 
 # priors
@@ -692,21 +713,17 @@ plot(fit_iq)
 #################### MODELS SUMMARY ###############################
 ###################################################################
 
-extract_id_terms <- function(fit, model_label, has_interaction = FALSE) {
+extract_model_terms <- function(fit, model_label) {
   s  <- summary(fit)
   vc <- VarCorr(fit)
 
-  fixed_params <- if (has_interaction) {
-    c("IDIntervention", "session:IDIntervention")
-  } else {
-    c("IDIntervention")
-  }
+  fixed_params <- c(
+    "IDIntervention",
+    "session",
+    "session_intervention"
+  )
 
-  random_terms <- if (has_interaction) {
-    c("IDIntervention", "session:IDIntervention")
-  } else {
-    c("IDIntervention")
-  }
+  random_terms <- fixed_params
 
   fixed_tab <- as.data.frame(s$fixed) |>
     tibble::rownames_to_column("Parameter") |>
@@ -715,49 +732,50 @@ extract_id_terms <- function(fit, model_label, has_interaction = FALSE) {
       Model = model_label,
       Group = "population"
     ) |>
-    dplyr::select(Model, Group, Parameter, Estimate, Est.Error, `l-95% CI`, `u-95% CI`, Rhat, Bulk_ESS, Tail_ESS)
+    dplyr::select(
+      Model, Group, Parameter, Estimate, Est.Error,
+      `l-95% CI`, `u-95% CI`, Rhat, Bulk_ESS, Tail_ESS
+    )
 
-  study_sd <- as.data.frame(vc$study$sd) |>
-    tibble::rownames_to_column("term") |>
-    dplyr::filter(term %in% random_terms) |>
-    dplyr::mutate(
-      Model = model_label,
-      Group = "study",
-      Parameter = paste0("sd(", term, ")"),
-      `l-95% CI` = Q2.5,
-      `u-95% CI` = Q97.5,
-      Rhat = NA_real_,
-      Bulk_ESS = NA_real_,
-      Tail_ESS = NA_real_
-    ) |>
-    dplyr::select(Model, Group, Parameter, Estimate, Est.Error, `l-95% CI`, `u-95% CI`, Rhat, Bulk_ESS, Tail_ESS)
+  get_sd_tab <- function(group_name) {
+    if (is.null(vc[[group_name]]$sd)) return(NULL)
 
-  case_sd <- as.data.frame(vc$`study:case`$sd) |>
-    tibble::rownames_to_column("term") |>
-    dplyr::filter(term %in% random_terms) |>
-    dplyr::mutate(
-      Model = model_label,
-      Group = "study:case",
-      Parameter = paste0("sd(", term, ")"),
-      `l-95% CI` = Q2.5,
-      `u-95% CI` = Q97.5,
-      Rhat = NA_real_,
-      Bulk_ESS = NA_real_,
-      Tail_ESS = NA_real_
-    ) |>
-    dplyr::select(Model, Group, Parameter, Estimate, Est.Error, `l-95% CI`, `u-95% CI`, Rhat, Bulk_ESS, Tail_ESS)
+    as.data.frame(vc[[group_name]]$sd) |>
+      tibble::rownames_to_column("term") |>
+      dplyr::filter(term %in% random_terms) |>
+      dplyr::mutate(
+        Model = model_label,
+        Group = group_name,
+        Parameter = paste0("sd(", term, ")"),
+        `l-95% CI` = Q2.5,
+        `u-95% CI` = Q97.5,
+        Rhat = NA_real_,
+        Bulk_ESS = NA_real_,
+        Tail_ESS = NA_real_
+      ) |>
+      dplyr::select(
+        Model, Group, Parameter, Estimate, Est.Error,
+        `l-95% CI`, `u-95% CI`, Rhat, Bulk_ESS, Tail_ESS
+      )
+  }
 
-  out <- dplyr::bind_rows(fixed_tab, study_sd, case_sd)
+  out <- dplyr::bind_rows(
+    fixed_tab,
+    get_sd_tab("study"),
+    get_sd_tab("study:case")
+  )
 
   if (!is.null(s$splines)) {
     spline_tab <- as.data.frame(s$splines) |>
       tibble::rownames_to_column("Parameter") |>
-      dplyr::filter(grepl("IDIntervention", Parameter)) |>
       dplyr::mutate(
         Model = model_label,
         Group = "smooth"
       ) |>
-      dplyr::select(Model, Group, Parameter, Estimate, Est.Error, `l-95% CI`, `u-95% CI`, Rhat, Bulk_ESS, Tail_ESS)
+      dplyr::select(
+        Model, Group, Parameter, Estimate, Est.Error,
+        `l-95% CI`, `u-95% CI`, Rhat, Bulk_ESS, Tail_ESS
+      )
 
     out <- dplyr::bind_rows(out, spline_tab)
   }
@@ -766,10 +784,10 @@ extract_id_terms <- function(fit, model_label, has_interaction = FALSE) {
 }
 
 out <- dplyr::bind_rows(
-  extract_id_terms(fit1, "Fit 1", has_interaction = TRUE),
-  extract_id_terms(fit2, "Fit 2", has_interaction = FALSE),
-  extract_id_terms(fit3, "Fit 3", has_interaction = TRUE),
-  extract_id_terms(fit4, "Fit 4", has_interaction = FALSE)
+  extract_model_terms(fit1, "Fit 1"),
+  extract_model_terms(fit2, "Fit 2"),
+  extract_model_terms(fit3, "Fit 3"),
+  extract_model_terms(fit4, "Fit 4")
 )
 
 kableExtra::kable(out)
@@ -794,9 +812,9 @@ study_case_pairs <- data_demo %>%
 # newdata for level shift at phase onset
 newdata_level <- tidyr::crossing(
   study_case_pairs,
-  ID = factor(c("Baseline", "Intervention"),
-              levels = c("Baseline", "Intervention")),
-  session = 0,
+  ID = levels(data_demo$ID),
+  session = data_demo$session,
+  session_intervention = 0,
   success_rate = median(data_demo$success_rate, na.rm = TRUE),
   fail_rate    = median(data_demo$fail_rate, na.rm = TRUE)
 )
@@ -857,7 +875,7 @@ rq_one_pred_case <- avg_predictions(fit1,
 rq_one_pred_study <- avg_predictions(fit1,
                                newdata = newdata_level,
                                by = c("ID", "study"),
-                               re_formula = ~(1 +  ID + session + session:ID | study), #random effects of study
+                               re_formula = ~(1 + session + ID + session_intervention | study), #random effects of study
                                type = "response",
                                conf_level = 0.9) 
 
@@ -892,7 +910,7 @@ rq_one_slope_study <- avg_slopes(fit1,
                                newdata = newdata_level,
                                variables = "session",
                                by = c("ID", "study"),
-                               re_formula = ~(1 +  ID + session + session:ID | study), #random effects of study
+                               re_formula = ~(1 +  session + ID + session_intervention | study), #random effects of study
                                type = "response",
                                conf_level = 0.9) 
 
@@ -924,8 +942,9 @@ print(paste0("Number of unique study-case combinations: ",
 
 pred_grid_iq <- tidyr::crossing(
   study_case_pairs,                              # all observed study-case combinations
-  ID = levels(data_demo$ID),                     # include all participant IDs used by the model
-  session = 0,                                   # hold session constant at 0
+  ID = levels(data_demo$ID),                     # include all participant IDs used by the model                  
+  session = data_demo$session,              
+  session_intervention = 0, # hold session constant at 0
   IQ_gpc = iq_gpc_vals,                          # evaluate predictions at the selected IQ values
   success_rate = median(data_demo$success_rate), # include median success_rate values
   fail_rate = median(data_demo$fail_rate)        # include median fail_rate values
@@ -941,7 +960,8 @@ pred_grid_iq <- tidyr::crossing(
 pred_grid_iq_study <- tidyr::crossing(
   study_case_pairs,                              # all observed study-case combinations
   ID = levels(data_demo$ID),                     # include all participant IDs used by the model
-  session = 0,                                   # hold session constant at 0
+  session = data_demo$session,
+  session_intervention = 0, # hold session constant at 0
   IQ_gpc = iq_gpc_vals,                          # evaluate predictions at the selected IQ values
   success_rate = median(data_demo$success_rate), # include median success_rate values
   fail_rate = median(data_demo$fail_rate)        # include median fail_rate values
@@ -958,7 +978,8 @@ pred_grid_iq_study <- tidyr::crossing(
 pred_grid_iq_case <- tidyr::crossing(
   study_case_pairs,
   ID = levels(data_demo$ID),
-  session = 0,
+  session = data_demo$session,
+  session_intervention = 0,
   IQ_gpc = iq_gpc_vals,
   success_rate = median(data_demo$success_rate), # include median success_rate values
   fail_rate = median(data_demo$fail_rate)        # include median fail_rate values
@@ -986,7 +1007,7 @@ IQ_rq_one_pred_study <- avg_predictions(
   fit_iq,
   newdata = pred_grid_iq_study,
   by = c("IQ_label", "ID", "study"),
-  re_formula = ~ (1 + session * ID | study/case), 
+  re_formula = ~ (1 + session + ID + session_intervention | study/case), 
   type = "response",
   conf_level = 0.9
 )
@@ -1029,7 +1050,7 @@ IQ_rq_one_slope_study <- avg_slopes(
   newdata = pred_grid_iq_study,
   variables = "session",
   by = c("IQ_label", "ID", "study"),
-  re_formula = ~ (1 + session * ID | study/case),
+  re_formula = ~ (1 + session + ID + session_intervention | study/case),
   type = "response",
   conf_level = 0.9
 )
@@ -1088,9 +1109,9 @@ fit1 %>%
 
 ## forest plot of the phase*session effect per study (trend)
 fit1 %>% 
-  spread_draws(`b_session:IDIntervention`, r_study[study, `session:IDIntervention`]) %>%
+  spread_draws(`b_session_intervention`, r_study[study, `session_intervention`]) %>%
   # add the grand mean to the group-specific deviations
-  mutate(mu = `b_session:IDIntervention` + r_study) %>%
+  mutate(mu = `b_session_intervention` + r_study) %>%
   ungroup() %>%
   mutate(study = str_replace_all(study, "[_]", " ")) %>% 
   # plot
@@ -1126,9 +1147,9 @@ fit1 %>%
 
 ## forest plot of the phase*session effect per case within study (trend)
 fit1 %>% 
-  spread_draws(`b_session:IDIntervention`, `r_study:case`[`study:case`, `session:IDIntervention`]) %>%
+  spread_draws(`b_session_intervention`, `r_study:case`[`study:case`, `session_intervention`]) %>%
   # add the grand mean to the group-specific deviations
-  mutate(mu = `b_session:IDIntervention` + `r_study:case`) %>%
+  mutate(mu = `b_session_intervention` + `r_study:case`) %>%
   ungroup() %>%
   mutate(`study:case` = str_replace_all(`study:case`, "[_]", " ")) %>% 
   # plot
